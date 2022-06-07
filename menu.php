@@ -182,6 +182,10 @@
               case 'users':
                 include('users.php');
               break;
+
+              case 'roles':
+                include('roles.php');
+              break;
               
               default:
                 // code...
@@ -283,6 +287,12 @@
 
       echo '<script src="./js/users.js?'.$md5.'"></script>';
     break;
+
+    case 'roles':
+      $md5 = md5_file('./js/roles.js');
+
+      echo '<script src="./js/roles.js?'.$md5.'"></script>';
+    break;
     
     default:
       // code...
@@ -305,7 +315,7 @@ $(document).ready( function(){
       valid_token.then( response => {
         $('#p_user_name').html( `Bienvenido ${response.name}` );
 
-        getMenu( response.uid, general_opt );
+        getMenu( response.idrole, general_opt );
 
 
       }, (errors) => {

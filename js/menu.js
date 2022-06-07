@@ -1,6 +1,6 @@
 const getMenu = ( uid, genopt='' ) =>{
     const settings = {
-        'url'    :'http://localhost:8080/api/users/rights/'+uid,
+        'url'    :'http://localhost:8080/api/roles/rights/'+uid,
         'method' :'POST',
         'timeout':0,
         'async'  : true,
