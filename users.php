@@ -120,12 +120,12 @@
           <div class="row">
             <div class="col col-6">
               <label class="form-label" for="regions">Regiones</label>
-              <select class="form-select" multiple id="regions"></select>
+              <select class="form-select form-select" multiple id="regions"></select>
             </div>
 
             <div class="col col-6">
               <label class="form-label" for="child_regions">Plazas</label>
-              <select class="form-select" multiple id="child_regions"></select>
+              <select class="form-select form-select" multiple id="child_regions"></select>
             </div>
           </div>
 

@@ -58,13 +58,15 @@ const handleErrors = ( errors ) => {
 
 	//console.log( status );
 	//console.log( statusText );
-	console.log( responseJSON );
+	//console.log( responseJSON );
 
     if( responseJSON.msg ){
-        if( responseJSON.code.includes('AUT') )
+    	if( responseJSON.code.includes('AUT') )
         	closeSesion();
 
-        toastr.error( responseJSON.msg, console.log('entro') );
+
+       
+        toastr.error( responseJSON.msg, 'Error' );
 
         return;
     }

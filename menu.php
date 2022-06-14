@@ -186,6 +186,10 @@
               case 'roles':
                 include('roles.php');
               break;
+
+              case 'cards':
+                include('cards.php');
+              break;
               
               default:
                 // code...
@@ -292,6 +296,12 @@
       $md5 = md5_file('./js/roles.js');
 
       echo '<script src="./js/roles.js?'.$md5.'"></script>';
+    break;
+
+    case 'cards':
+      $md5 = md5_file('./js/cards.js');
+
+      echo '<script src="./js/cards.js?'.$md5.'"></script>';
     break;
     
     default:
