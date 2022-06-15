@@ -33,7 +33,7 @@ $(document).ready( ()=>{
     handleErrors( errors );
   });
 
-  //TABLAS
+  //TABLA
   const opts = {
     lengths : [ 20, 30, 50, 75, 100 ],
     language: genObj.language,
@@ -57,6 +57,9 @@ $(document).ready( ()=>{
     beforeSend: ( req ) => {
       req.setRequestHeader('x-token', localStorage.getItem('x-token') );
       req.setRequestHeader('search', $('#input-search').val() );
+
+      if( $('#filter_supplier').val()!==null )
+        req.setRequestHeader('supplier', $('#filter_supplier').val() );
     },      
     error: function( errors ){
       handleErrors( errors );
@@ -182,13 +185,15 @@ $(document).ready( ()=>{
   $('#btn-save-card').on('click', () => {
     const uid = $('#hi_idcard').val();
 
+    console.log( $('#vehicle').attr('idvehicle') );
+
     const form = {
       number      : { value:$('#number').val(), required:true },
       idsupplier  : { value:$('#supplier').val(), required:true },
       status      : { value: ($('#status').is(':checked'))?true:false, required:false },
       idregion    : { value:$('#region').val() },
       idsubregion : { value:$('#subregion').val() },
-      idvehicle   : { value:$('#vehicle').attr('idvehicle') }
+      idvehicle   : { value:($('#vehicle').attr('idvehicle')==='')?null:$('#vehicle').attr('idvehicle'), passEmpety:true }
     }
 
     const { pass, pass_data } = formInputsValidate(form);

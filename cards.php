@@ -7,11 +7,11 @@
   <div class="row g-3 align-items-center">
         
     <div class="col-auto">
-        <label for="input-search" class="col-form-label">Numero</label>
+        <label for="input-search" class="col-form-label ">Numero</label>
     </div>
 
     <div class="col-auto">
-        <input type="text" id="input-search" size="10" class="form-control form-control-sm" aria-describedby="">
+        <input type="text" id="input-search" size="10" class="form-control form-control-sm text-uppercase" aria-describedby="">
     </div>
 
     <div class="col-auto">

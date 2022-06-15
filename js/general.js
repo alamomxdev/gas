@@ -157,7 +157,7 @@ const formInputsValidate = ( formInputs ) => {
 			pass=false;
 		}
 
-		if( obj.value || typeof(obj.value)=='boolean' ){
+		if( (obj.value || obj.passEmpety  ) || typeof(obj.value)=='boolean' ){
 			pass_data.push( [ key, obj.value ] );
 		}
 
