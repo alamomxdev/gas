@@ -274,9 +274,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+<script src="./js/general.js?<?php echo md5_file('./js/general.js'); ?>"></script>
 <script src="./js/validate.js?<?php echo md5_file('./js/validate.js'); ?>"></script>
 <script src="./js/menu.js?<?php echo md5_file('./js/menu.js'); ?>"></script>
-<script src="./js/general.js?<?php echo md5_file('./js/general.js'); ?>"></script>
+
 
 <?php
   switch ($_GET['opt']) {
@@ -331,7 +332,7 @@ $(document).ready( function(){
       }, (errors) => {
           localStorage.clear();
 
-          window.location = 'http://localhost/gas/index.php';
+          window.location = 'https://'+window.location.hostname+'/gas/index.php';
       });
   }
 
@@ -339,7 +340,7 @@ $(document).ready( function(){
   $('#btn-salir').click(function(){
     localStorage.clear();
 
-    window.location = 'http://localhost/gas/index.php';
+    window.location = 'https://'+window.location.hostname+'/gas/index.php';
   });
 
   //Accion del menu de herramientas
@@ -356,7 +357,7 @@ $(document).ready( function(){
   });
 
   /* const char_pie1 = new Chart('g_grafica_1', {
-    type:'pie',
+    type:'pie',s
     data:{
       labels : ['Norte', 'Centro', 'Sureste', 'Baja Sur', 'Corporativo', 'Noroeste'],
       datasets: [

@@ -150,8 +150,12 @@ const formInputsValidate = ( formInputs ) => {
 	let pass = true;
 	const pass_data = [];
 
+
 	$.each( formInputs, ( key, obj ) =>{
-		if( obj.requiered && obj.value==='' ){
+		if( obj.required && obj.value==='' ){
+			console.log( key );
+			console.log( obj );
+
 			toastr.error(`El campo de ${key} es requerido`);
 
 			pass=false;

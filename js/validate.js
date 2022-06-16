@@ -1,7 +1,7 @@
 const validateJWT = ( token='' ) => {
     //Configuracion del ajax para envio de datos a la API
     const settings = {
-        'url'    :'http://localhost:8080/api/auth/token',
+        'url'    : apiObj.host+'/api/auth/token',
         'method' :'POST',
         'timeout':0,
         'async'  : true,

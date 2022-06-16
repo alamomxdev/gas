@@ -134,10 +134,10 @@ $(document).ready( () =>{
 		});
 
 		const form = {
-			idrole	: { value:$('#hi_idrole').val(), requiered:false },
-			name 	: { value:$('#name').val(), requiered:true },
-			status	: { value:$('#status').is(':checked'), requiered:false },
-			rights 	: { value:rights, requiered:false }
+			idrole	: { value:$('#hi_idrole').val(), required:false },
+			name 	: { value:$('#name').val(), required:true },
+			status	: { value:$('#status').is(':checked'), required:false },
+			rights 	: { value:rights, required:false }
 		}
 
 		const { pass, pass_data } = formInputsValidate(form);

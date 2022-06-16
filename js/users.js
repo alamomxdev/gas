@@ -25,7 +25,7 @@ $(document).ready( () =>{
 			req.setRequestHeader('search', $('#input-search').val() );
 		},			
 		error: function( errors ){
-			handleErrors( errors );
+			//handleErrors( errors );
 		}
 	}
 
@@ -165,14 +165,14 @@ $(document).ready( () =>{
 
 
 		const form = {
-			iduser 			: { value:$('#hi_iduser').val(), requiered: false }, 
-			name 			: { value:$('#name').val(), requiered: true }, 
-			status 			: { value:$('#status').is(':checked'), requiered: false }, 
-			email 			: { value:$('#email').val(), requiered: true }, 
-			idrole 			: { value:$('#role').val(), requiered: true }, 
-			password 		: { value:$('#password').val(), requiered: false },
-			password_confirm: { value:$('#password_confirm').val(), requiered: false },
-			regions 		: { value:[ r, rc ], requiered:false }
+			iduser 			: { value:$('#hi_iduser').val(), required: false }, 
+			name 			: { value:$('#name').val(), required: true }, 
+			status 			: { value:$('#status').is(':checked'), required: false }, 
+			email 			: { value:$('#email').val(), required: true }, 
+			idrole 			: { value:$('#role').val(), required: true }, 
+			password 		: { value:$('#password').val(), required: false },
+			password_confirm: { value:$('#password_confirm').val(), required: false },
+			regions 		: { value:[ r, rc ], required:false }
 		};
 
 		if( form.password.value && form.password.value!==form.password_confirm.value ){

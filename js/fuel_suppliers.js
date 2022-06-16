@@ -16,7 +16,7 @@ $(document).ready(function(){
 	        	{ data: 'status', render: ( data, type, row ) => { return '<button class="btn btn-primary btn-sm" uid="'+row.idsupplier+'"> <i class="fa-solid fa-folder-open"></i> </button>'; } },
 	        ];
 	const ajax = {
-		url: "http://localhost:8080/api/suppliers",
+		url: apiObj.host+"/api/suppliers",
 		type : "GET",
 		dataSrc: "suppliers",
 		beforeSend: ( req ) => {
@@ -95,15 +95,15 @@ $(document).ready(function(){
 	//Guardar registro
 	$('#btn-save-supplier').on('click', () => {
 		const form = {
-			idsupplier 		: { value:$('#hi_idsupplier').val(), requiered: false }, 
-			name 			: { value:$('#name').val(), requiered: true }, 
-			status 			: { value:$('#status').is(':checked'), requiered: false }, 
-			bussines_name 	: { value:$('#bussines_name').val(), requiered: true }, 
-			rfc 			: { value:$('#rfc').val(), requiered: false }, 
-			phone1 			: { value:$('#phone1').val(), requiered: true }, 
-			phone2 			: { value:$('#phone2').val(), requiered: false }, 
-			email1 			: { value:$('#email1').val(), requiered: true }, 
-			email2 			: { value:$('#email2').val(), requiered: false }
+			idsupplier 		: { value:$('#hi_idsupplier').val(), required: false }, 
+			name 			: { value:$('#name').val(), required: true }, 
+			status 			: { value:$('#status').is(':checked'), required: false }, 
+			bussines_name 	: { value:$('#bussines_name').val(), required: true }, 
+			rfc 			: { value:$('#rfc').val(), required: false }, 
+			phone1 			: { value:$('#phone1').val(), required: true }, 
+			phone2 			: { value:$('#phone2').val(), required: false }, 
+			email1 			: { value:$('#email1').val(), required: true }, 
+			email2 			: { value:$('#email2').val(), required: false }
 		};
 
 		const { pass, pass_data } = formInputsValidate(form);
