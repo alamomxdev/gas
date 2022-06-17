@@ -205,7 +205,7 @@ $(document).ready( function(){
         const valid_token = validateJWT( localStorage.getItem('x-token') );
 
         valid_token.then( response => {
-            window.location = 'http://localhost/gas/menu.php';
+            window.location = `${apiObj.site}/menu.php`;
         }, (errors) => {
             localStorage.clear();
         });
@@ -233,7 +233,7 @@ $(document).ready( function(){
 
         //Configuracion del ajax para envio de datos a la API
         const settings = {
-            'url'    :'http://localhost:8080/api/auth/login',
+            'url'    : apiObj.host+'/api/auth/login',
             'method' :'POST',
             'timeout':0,
             'headers':{
@@ -250,7 +250,7 @@ $(document).ready( function(){
 
                 $(this).prop('disabled', false);
 
-                window.location = 'http://localhost/gas/menu.php';
+                window.location = apiObj.site+'/menu.php';
             })
             .fail( ( errors ) => {
                 const err = errors.responseJSON;

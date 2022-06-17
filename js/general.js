@@ -1,8 +1,10 @@
 const genObj = {};
 
 const apiObj = {
+	//host : 'http://localhost:8080',
+	//site : 'http://localhost/gas/'
 	host : 'http://localhost:8080',
-	site : 'http://localhost/gas/'
+	site : 'http://localhost/gas'
 }
 
 genObj.lenguage = {
