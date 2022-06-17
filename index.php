@@ -196,6 +196,7 @@
 
 <script src="https://kit.fontawesome.com/fb1f2c1754.js" crossorigin="anonymous"></script>
 
+<script src="./js/general.js?<?php echo md5_file('./js/general.js'); ?>"></script>
 <script src="./js/validate.js?<?php echo md5_file('./js/validate.js'); ?>"></script>
 
 <script type="text/javascript">

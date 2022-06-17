@@ -275,7 +275,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <script src="./js/general.js?<?php echo md5_file('./js/general.js'); ?>"></script>
+
 <script src="./js/validate.js?<?php echo md5_file('./js/validate.js'); ?>"></script>
+
 <script src="./js/menu.js?<?php echo md5_file('./js/menu.js'); ?>"></script>
 
 
@@ -340,7 +342,7 @@ $(document).ready( function(){
   $('#btn-salir').click(function(){
     localStorage.clear();
 
-    window.location = 'https://'+window.location.hostname+'/gas/index.php';
+    window.location = apiObj.site;
   });
 
   //Accion del menu de herramientas

@@ -122,7 +122,7 @@ $(document).ready( () =>{
 			const form = document.forms['form-user'];
 			form.reset();
 
-			const { user, regions, user_regions } = response;
+			const { user, regions, user_regions, user_subregions } = response;
 			const { iduser_create, iduser_update, createdAt, updatedAt, idrole, ...data } = user;
 
 			data.role = idrole;
@@ -134,21 +134,13 @@ $(document).ready( () =>{
 			$('#hi_iduser').val(data.iduser);
 
 			//Listado de plazas de las zonas a las que tiene acceos el usuario
-			$.each(regions, ( i, v )=>{
-				let s = '';
-
-				$.each( user_regions, (index, value) =>{
-					if( value.idregion===v.idregion )
-						s = 'selected';
-				});
-
-				$('#child_regions').append(`<option ${s} value='${v.idregion}'>${v.name}</option>`);
+			$.each(regions, ( i, v ) =>{
+				$('#child_regions').append(`<option value='${v.idregion}'>${v.name}</option>`);
 			});
 			
 			//Regiones a las que el usuario tiene acceso
-			const r = [];
-			$.each( user_regions, (i, v) => r.push( v.idregion ) );
-			$('#regions').val( r );
+			$('#regions').val( user_regions );
+			$('#child_regions').val( user_subregions );
 
 			modal.modal('show');
 		}, errors => {

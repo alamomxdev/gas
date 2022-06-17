@@ -12,11 +12,11 @@ const validateJWT = ( token='' ) => {
 
     return new Promise( ( resolve, reject ) => {
         $.ajax( settings )
-        .done( ( response ) => {
-            resolve( response );
-        })
-        .fail( errors => {
-            reject(errors);
-        } );
+                        .done( ( response ) => {
+                            resolve( response );
+                        })
+                        .fail( errors => {
+                            reject(errors);
+                        } );
     });
 }

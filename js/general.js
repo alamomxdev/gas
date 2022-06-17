@@ -1,5 +1,10 @@
 const genObj = {};
 
+const apiObj = {
+	host : 'http://localhost:8080',
+	site : 'http://localhost/gas/'
+}
+
 genObj.lenguage = {
 		            "processing": "Procesando...",
 				    "lengthMenu": "Mostrar _MENU_ registros",
@@ -41,15 +46,12 @@ genObj.buttons = 	[
 				];
 genObj.lengths = [ 20, 30, 50, 75, 100 ];
 
-const apiObj = {
-	host : 'http://localhost:8080'
-}
 
 //Cierra la sesion
 const closeSesion = () => {
 	localStorage.clear();
 
-    window.location = 'http://localhost/gas/index.php';
+    window.location = apiObj.site;
 }
 
 //Controla los errores generados por la API y muestra alertas de los mismos
@@ -153,9 +155,6 @@ const formInputsValidate = ( formInputs ) => {
 
 	$.each( formInputs, ( key, obj ) =>{
 		if( obj.required && obj.value==='' ){
-			console.log( key );
-			console.log( obj );
-
 			toastr.error(`El campo de ${key} es requerido`);
 
 			pass=false;
