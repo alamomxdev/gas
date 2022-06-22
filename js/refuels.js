@@ -424,7 +424,7 @@ $(document).ready( () => {
 	$('#btn-view-img').on('click', function(){
 		const img = $(this).attr('img');
 
-		window.open('https://gascontrol.s3.amazonaws.com/'+img)
+		window.open('https://dg8dw0ohxnqbu.cloudfront.net/'+img);
 	});
 
 //MODAL DE TERJTAS

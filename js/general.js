@@ -3,7 +3,7 @@ const genObj = {};
 const apiObj = {
 	host : 'http://localhost:8080',
 	site : 'http://localhost/gas/'
-	//host : 'https://gcpro.us-east-1.elasticbeanstalk.com:8080',
+	//host : 'https://gcdev.tecnologiasalamo.com.mx:8080,
 	//site : 'https://gascontrol.tecnologiasalamo.com.mx'
 }
 
