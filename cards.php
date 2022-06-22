@@ -89,7 +89,7 @@
           <div class="row">
             <div class="col-2">
               <label class="form-label" for="iduser">#</label>
-              <input class="form-control form-control-sm" type="text" id="number">
+              <input class="form-control form-control-sm text-uppercase" type="text" id="number">
               <input type="hidden" id="hi_idcard">
             </div>
 
@@ -121,7 +121,7 @@
 
               <div class="input-group mt-3">
                   <label class="form-label" for="vehicle">Vehiculo: &nbsp;</label>
-                  <input type="text" class="form-control form-control-sm" placeholder="" aria-describedby="button-addon2" id="vehicle" disabled>
+                  <input type="text" class="form-control form-control-sm text-uppercase" placeholder="" aria-describedby="button-addon2" id="vehicle" disabled>
                   <button class="btn btn-secondary btn-sm" type="button" id="button-vehicle">
                       <i class="fa-brands fa-searchengin"></i>
                   </button>
@@ -171,7 +171,7 @@
                 </div>
 
                 <div class="col-auto">
-                  <input type="text" class="form-control form-control-sm" size="10" id="veicle-search">
+                  <input type="text" class="form-control form-control-sm text-uppercase" size="10" id="veicle-search">
                 </div>
 
                 <div class="col-auto">

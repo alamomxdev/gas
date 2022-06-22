@@ -190,6 +190,10 @@
               case 'cards':
                 include('cards.php');
               break;
+
+              case 'refuels':
+                include('refuels.php');
+              break;
               
               default:
                 // code...
@@ -306,6 +310,12 @@
 
       echo '<script src="./js/cards.js?'.$md5.'"></script>';
     break;
+
+    case 'refuels':
+      $md5 = md5_file('./js/refuels.js');
+
+      echo '<script src="./js/refuels.js?'.$md5.'"></script>';
+    break;
     
     default:
       // code...
@@ -334,7 +344,7 @@ $(document).ready( function(){
       }, (errors) => {
           localStorage.clear();
 
-          window.location = 'https://'+window.location.hostname+'/gas/index.php';
+          window.location = window.location = apiObj.site;
       });
   }
 

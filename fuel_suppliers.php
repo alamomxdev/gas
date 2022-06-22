@@ -11,7 +11,7 @@
     </div>
 
     <div class="col-auto">
-        <input type="text" id="input-search" class="form-control form-control-sm" aria-describedby="passwordHelpInline">
+        <input type="text" id="input-search" class="form-control form-control-sm text-uppercase" aria-describedby="passwordHelpInline">
     </div>
 
     <div class="col-auto">
@@ -84,7 +84,7 @@
 
             <div class="col-8">
               <label class="form-label" for="name">Nombre <span class="text-danger">*</span></label>
-              <input class="form-control form-control-sm" type="text" id="name">
+              <input class="form-control form-control-sm text-uppercase" type="text" id="name">
             </div>
 
             <div class="col-2">
@@ -96,36 +96,36 @@
           <div class="row">
             <div class="col-8">
               <label for="bussines_name" class="form-label">Razon Social <span class="text-danger">*</span></label>
-              <input class="form-control form-control-sm" type="text" id="bussines_name">
+              <input class="form-control form-control-sm text-uppercase" type="text" id="bussines_name">
             </div>
 
             <div class="col-4">
               <label class="form-label" for="rfc">RFC</label>
-              <input class="form-control form-control-sm" type="text" id="rfc"></input>
+              <input class="form-control form-control-sm text-uppercase" type="text" id="rfc"></input>
             </div>
           </div>
 
           <div class="row">
             <div class="col-6">
               <label class="form-label" for="phone1">Telefono #1 <span class="text-danger">*</span></label>
-              <input class="form-control form-control-sm" type="tel" id="phone1"></input>
+              <input class="form-control form-control-sm text-uppercase" type="tel" id="phone1"></input>
             </div>
 
             <div class="col-6">
               <label class="form-label" for="email1">Mail #1 <span class="text-danger">*</span></label>
-              <input class="form-control form-control-sm" type="email" id="email1"></input>
+              <input class="form-control form-control-sm text-uppercase" type="email" id="email1"></input>
             </div>
           </div>
 
           <div class="row">
             <div class="col-6">
               <label class="form-label" for="phone1">Telefono #2</label>
-              <input class="form-control form-control-sm" type="tel" id="phone2"></input>
+              <input class="form-control form-control-sm text-uppercase" type="tel" id="phone2"></input>
             </div>
 
             <div class="col-6">
               <label class="form-label" for="email1">Mail #2</label>
-              <input class="form-control form-control-sm" type="email" id="email2"></input>
+              <input class="form-control form-control-sm text-uppercase" type="email" id="email2"></input>
             </div>
           </div>
         </form>

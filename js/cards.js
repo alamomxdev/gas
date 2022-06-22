@@ -48,18 +48,18 @@ $(document).ready( ()=>{
             { data: 'subregion' },
             { data: 'economic_number' },
             { data: 'status', render: ( data, type, row, meta ) => { return ( data )?'<span class="badge bg-success"> Activo </span>':'<span class="badge bg-danger"> Inactivo </span>';  } },
-            { data: 'status', render: ( data, type, row ) => { return '<button class="btn btn-primary btn-sm" uid="'+row.idcard+'"> <i class="fa-solid fa-folder-open"></i> </button>'; } },
+            { data: 'status', render: ( data, type, row ) => { return '<button class="btn btn-primary btn-sm" uid="'+row.idcard+'"> <i class="fa-solid fa-pencil"></i> </button>'; } },
           ];
   const ajax = {
-    url: url,
+    url: `${url}`,
     type : "GET",
     dataSrc: "cards",
     beforeSend: ( req ) => {
       req.setRequestHeader('x-token', localStorage.getItem('x-token') );
-      req.setRequestHeader('search', $('#input-search').val() );
+      /*req.setRequestHeader('search', $('#input-search').val() );
 
       if( $('#filter_supplier').val()!==null )
-        req.setRequestHeader('supplier', $('#filter_supplier').val() );
+        req.setRequestHeader('supplier', $('#filter_supplier').val() );*/
     },      
     error: function( errors ){
       handleErrors( errors );
@@ -87,7 +87,14 @@ $(document).ready( ()=>{
 
   //Buscar CARD
   $('#btn-search').on('click', () => { 
-    table.ajax.reload(); 
+    const data = {
+        supplier: ($('#filter_supplier').val())?parseInt( $('#filter_supplier').val() ):'',
+        search  : $('#input-search').val()
+    }
+
+    const u = new URLSearchParams( data ).toString();
+
+    table.ajax.url(`${url}?${u}`).load();
   });
 
   //Buscar con ENTER
@@ -185,14 +192,12 @@ $(document).ready( ()=>{
   $('#btn-save-card').on('click', () => {
     const uid = $('#hi_idcard').val();
 
-    console.log( $('#vehicle').attr('idvehicle') );
-
     const form = {
       number      : { value:$('#number').val(), required:true },
       idsupplier  : { value:$('#supplier').val(), required:true },
       status      : { value: ($('#status').is(':checked'))?true:false, required:false },
-      idregion    : { value:$('#region').val() },
-      idsubregion : { value:$('#subregion').val() },
+      idregion    : { value: parseInt($('#region').val()) },
+      idsubregion : { value: parseInt($('#subregion').val()) },
       idvehicle   : { value:($('#vehicle').attr('idvehicle')==='')?null:$('#vehicle').attr('idvehicle'), passEmpety:true }
     }
 

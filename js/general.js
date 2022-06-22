@@ -1,10 +1,10 @@
 const genObj = {};
 
 const apiObj = {
-	//host : 'http://localhost:8080',
-	//site : 'http://localhost/gas/'
 	host : 'http://localhost:8080',
-	site : 'http://localhost/gas'
+	site : 'http://localhost/gas/'
+	//host : 'https://gcpro.us-east-1.elasticbeanstalk.com:8080',
+	//site : 'https://gascontrol.tecnologiasalamo.com.mx'
 }
 
 genObj.lenguage = {
@@ -58,18 +58,21 @@ const closeSesion = () => {
 
 //Controla los errores generados por la API y muestra alertas de los mismos
 const handleErrors = ( errors ) => {
-	const { status, statusText, responseJSON } = errors;
+	const { status, statusText, responseJSON, responseText } = errors;
 
+	//console.log( errors );
 	//console.log( status );
 	//console.log( statusText );
-	//console.log( responseJSON );
+	console.log( responseJSON );
+
+	if( !responseJSON.msg )
+		responseJSON.msg = responseJSON.error;
 
     if( responseJSON.msg ){
     	if( responseJSON.code.includes('AUT') )
         	closeSesion();
 
 
-       
         toastr.error( responseJSON.msg, 'Error' );
 
         return;
@@ -97,10 +100,19 @@ const dataTable = ( opt, ajax, columns ) => {
 		ajax			: ajax,
 		columns			: columns,
 		iDisplayLength	: opt.limit ,//Paginación
+		scrollY			: opt.scrollY,
+        scrollCollapse	: opt.scrollCollapse,
 		order: [[ 0, "asc" ]]
 	}).DataTable();
 
 	return table;
+}
+
+
+const objTOurl = ( obj ) => {
+	const u = new URLSearchParams( obj ).toString();
+
+	return u;
 }
 
 //Generador de settings para ajax
@@ -156,7 +168,7 @@ const formInputsValidate = ( formInputs ) => {
 
 
 	$.each( formInputs, ( key, obj ) =>{
-		if( obj.required && obj.value==='' ){
+		if( obj.required && !obj.value ){
 			toastr.error(`El campo de ${key} es requerido`);
 
 			pass=false;

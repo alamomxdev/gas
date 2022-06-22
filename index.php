@@ -250,7 +250,7 @@ $(document).ready( function(){
 
                 $(this).prop('disabled', false);
 
-                window.location = apiObj.site+'/menu.php';
+                window.location = apiObj.site+'menu.php';
             })
             .fail( ( errors ) => {
                 const err = errors.responseJSON;

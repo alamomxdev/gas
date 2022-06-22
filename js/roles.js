@@ -12,7 +12,7 @@ $(document).ready( () =>{
 	        	{ data: 'idrole' },
 	        	{ data: 'name' },
 	        	{ data: 'status', render: ( data, type, row, meta ) => { return ( data )?'<span class="badge bg-success"> Activo </span>':'<span class="badge bg-danger"> Inactivo </span>';  } },
-	        	{ data: 'status', render: ( data, type, row ) => { return '<button class="btn btn-primary btn-sm" uid="'+row.idrole+'"> <i class="fa-solid fa-folder-open"></i> </button>'; } },
+	        	{ data: 'status', render: ( data, type, row ) => { return '<button class="btn btn-primary btn-sm" uid="'+row.idrole+'"> <i class="fa-solid fa-pencil"></i> </button>'; } },
 	        ];
 
 	const ajax = {
@@ -21,7 +21,6 @@ $(document).ready( () =>{
 		dataSrc: "roles",
 		beforeSend: ( req ) => {
 			req.setRequestHeader('x-token', localStorage.getItem('x-token') );
-			req.setRequestHeader('search', $('#input-search').val() );
 		},			
 		error: function( errors ){
 			handleErrors( errors );
@@ -66,7 +65,13 @@ $(document).ready( () =>{
 
 	//Buscar Role
 	$('#btn-search').on('click', () => { 
-		table.ajax.reload(); 
+		const data = {
+			search : $('#input-search').val()
+		}
+
+		const u = objTOurl( data );
+
+		table.ajax.url(`${ url }?${ u }`).load();
 	});
 
 	//Buscar con ENTER
