@@ -17,9 +17,9 @@ $(document).ready( () => {
 	const modal = $('#modal-refuel');
 	const modal_cards = $('#modal-cards');
 	const modal_vehicles = $('#modal-vehicles');
-  	//modal.modal({backdrop: 'static', keyboard: false, show:true });
-  	//modal_cards.modal({backdrop: 'static', keyboard: false, show:true });
-  	//modal_vehicles.modal({backdrop: 'static', keyboard: false, show:true });
+  	modal.modal({backdrop: 'static', keyboard: false, show:true });
+  	modal_cards.modal({backdrop: 'static', keyboard: false, show:true });
+  	modal_vehicles.modal({backdrop: 'static', keyboard: false, show:true });
 
 //TABLAS
 //############################################################
