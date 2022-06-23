@@ -263,6 +263,50 @@
     </div>
 
     <input type="hidden" name="hi_opt" id="hi_opt">
+
+    <div class="modal" id="modal-load" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+
+            <div class="modal-content">
+
+                  <div class="modal-body">
+
+                      <div class="text-center">
+                          <div class="spinner-grow text-primary" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-secondary" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-success" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-danger" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-warning" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-info" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-dark" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+                      </div>
+
+                  </div>
+
+            </div>
+
+        </div>
+    </div>
 </body>
 </html>
 
@@ -477,6 +521,22 @@ $(document).ready( function(){
 			datasetFill:true,
 	  }
   }); */
+
+  const modal_load = $('#modal-load');
+  modal_load.modal({backdrop: 'static', keyboard: false, show:true });
+
+  $(document).ajaxStart( () => {
+        //console.log( 'Start: ', new Date() );
+
+        modal_load.modal('show');
+
+  }).ajaxStop( () => {
+        //console.log( 'Stop: ', new Date() );
+
+        modal_load.modal('hide');
+  }).ajaxError( () => {
+        modal_load.modal('hide');
+  } );
 
 } );
 </script>

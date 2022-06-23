@@ -17,6 +17,8 @@ $(document).ready( () => {
 	const modal = $('#modal-refuel');
 	const modal_cards = $('#modal-cards');
 	const modal_vehicles = $('#modal-vehicles');
+	const modal_img = $('#modal-img');
+
   	modal.modal({backdrop: 'static', keyboard: false, show:true });
   	modal_cards.modal({backdrop: 'static', keyboard: false, show:true });
   	modal_vehicles.modal({backdrop: 'static', keyboard: false, show:true });
@@ -74,14 +76,14 @@ $(document).ready( () => {
 		const columns_g = [
 			{ data: 'number' },
 			{ data: 'supplier' },
-			{ data: 'supplier' },
 			{ data: 'region' },
 			{ data: 'subregion' },
+			{ data: 'economic_number' },
 			{ data: 'status', render: ( data, type, row ) => { 
 				const region = ( row.region )?row.region:'';
 				const subregion = ( row.subregion )?row.subregion:'';
 
-				return `<button class='btn btn-primary btn-sm' idcard='${ row.idcard }' number='${ row.number }' economic_number='${ row.economic_number }' region='${ region }' subregion='${ subregion }'> 
+				return `<button class='btn btn-primary btn-sm' idcard='${ row.idcard }' number='${ row.number }' economic_number='${ (row.economic_number)?row.economic_number:'' }' idvehicle='${ (row.idvehicle)?row.idvehicle:'' }' region='${ region }' subregion='${ subregion }'> 
 								<i class="fa-solid fa-arrow-pointer"></i> 
 						</button>`; 
 			} }
@@ -424,7 +426,13 @@ $(document).ready( () => {
 	$('#btn-view-img').on('click', function(){
 		const img = $(this).attr('img');
 
-		window.open('https://dg8dw0ohxnqbu.cloudfront.net/'+img);
+		//window.open('https://dg8dw0ohxnqbu.cloudfront.net/'+img);
+
+		$('#modal-img img').prop('src', '');
+		
+		$('#modal-img img').prop('src', `https://dg8dw0ohxnqbu.cloudfront.net/${img}`);
+
+		modal_img.modal('show');
 	});
 
 //MODAL DE TERJTAS
@@ -446,6 +454,7 @@ $(document).ready( () => {
 	$('#table-cards').on('click', '.btn', function(){
 		const idcard = $(this).attr('idcard')
 		const economic_number = $(this).attr('economic_number');
+		const idvehicle = $(this).attr('idvehicle');
 		const number = $(this).attr('number');
 
 		const region = $(this).attr('region');
@@ -453,6 +462,12 @@ $(document).ready( () => {
 
 		$('#card').val( number );
 		$('#card').attr('idcard', idcard);
+		$('#card').attr('economic_number', economic_number);
+		$('#card').attr('idvehicle', idvehicle);
+
+		if( idvehicle ){
+
+		}
 
 		/*$('#region').val(region);
 		$('#subregion').val(subregion);*/
@@ -490,6 +505,8 @@ $(document).ready( () => {
 	$('#btn-erase-card').on('click', ()=>{
 		$('#card').val('');
 		$('#card').attr('idcard', '');
+		$('#card').attr('economic_number', '');
+		$('#card').attr('idvehicle', '');
 
 		/*$('#region').val('');
 		$('#subregion').val('');*/
@@ -513,8 +530,14 @@ $(document).ready( () => {
 		modal_vehicles.modal('show');
 		modal.modal('hide');
 
+		const card_vehicle = $('#card').attr('economic_number');
+
 		$('#modal-vehicles input').val('');
 		$('#vehicle-number').attr( 'idvehicle', '' );
+
+		if( card_vehicle ){
+			$('#vehicle-search').val( card_vehicle );
+		}
 
 		vehicle_table.ajax.url(`${ ajax_v.url }`).load();
 	});
@@ -543,6 +566,11 @@ $(document).ready( () => {
 
 	//Buscar en tabla
 	$('#btn-search-vehicle').on('click', () => {
+		const card_vehicle = $('#card').attr('economic_number');
+
+		if( card_vehicle )
+			$('#vehicle-search').val( card_vehicle );
+
 		const economic_number = $('#vehicle-search').val();
 
 		if( economic_number ){
@@ -616,6 +644,8 @@ $(document).ready( () => {
 
 		$('#card').val('');
 		$('#card').attr('idcard', '');
+		$('#card').attr('economic_number', '');
+		$('#card').attr('idvehicle', '');
 
 		$('#hi_idrefuel').val('');
 

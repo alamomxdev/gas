@@ -119,6 +119,7 @@ $(document).ready( ()=>{
     form.reset();
 
     $('#hi_idcard').val('');
+    $('#sp-uid').html('')
     $('#vehicle').attr('economic_number', '');
     $('#vehicle').attr('idvehicle', '');
 

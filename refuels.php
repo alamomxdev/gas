@@ -442,3 +442,23 @@
 
 </div>
 <!-- Modal Vehiculos -->
+
+<!-- Modal img -->
+<div class="modal" id="modal-img">
+    
+    <div class="modal-dialog modal-dialog-centered">
+        
+        <div class="modal-content">
+            
+            <div class="modal-body">
+                    
+                <img src="" class="img-fluid">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- Modal img -->
