@@ -536,7 +536,7 @@ $(document).ready( function(){
         modal_load.modal('hide');
   }).ajaxError( () => {
         modal_load.modal('hide');
-  } );
+  });
 
 } );
 </script>

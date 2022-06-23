@@ -1,5 +1,5 @@
 <div id="div_contenido">
-  <h5>Empresas de carga</h5>
+  <h5>Proveedores</h5>
 
   <hr>
 
