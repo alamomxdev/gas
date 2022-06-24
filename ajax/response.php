@@ -64,7 +64,7 @@
         left join VehicleDriverHistoryTemplateTypes vdhtt on vdhtt.Id = vdht.TypeId
         where vh.SequenceNumber = $_GET[e]
        	and CAST(SWITCHOFFSET(vdh.StartTime, SUBSTRING(CAST(CAST(vdh.StartTime AS DATETIME) AT TIME ZONE isnull(pick_l.timezone, t.tenanttimezone) AS VARCHAR), 25, 6)) AS DATETIME) between '$yesterday' and '$today'
-        order by ActualEndTime desc";
+        order by (CAST(vdh.ActualStartTime AS DATETIME)) desc";
 	$res = $fm_l->query( $sql );
 
 	while ($row = $res->fetch()) {

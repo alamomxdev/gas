@@ -526,7 +526,7 @@ $(document).ready( function(){
   modal_load.modal({backdrop: 'static', keyboard: false, show:true });
 
   $(document).ajaxError( function( event, jqxhr, settings, thrownError ){
-        toastr.error( `${ event.type } ${ jqxhr.responseText } ${ settings.types }` );
+        //toastr.error( `${ event.type } ${ jqxhr.responseText } ${ settings.type }` );
 
 
         modal_load.modal('hide');

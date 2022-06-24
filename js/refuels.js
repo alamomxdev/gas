@@ -46,7 +46,16 @@ $(document).ready( () => {
 			{ data: 'amount' },
 			{ data: 'liters' },
 			/*{ data: 'odometer' },*/
-			{ data: 'idrefuel', render: ( data, type, row ) => { return `<button class='btn btn-primary btn-sm' idrefuel='${ data }'> <i class="fa-solid fa-pencil"></i> </button>`; } }
+			{ 
+				data: 'idrefuel', 
+				render: ( data, type, row ) => { 
+					const btn_open = `<button class='btn btn-primary btn-sm' idrefuel='${ data }'> <i class="fa-solid fa-pencil"></i> </button>`;
+
+					const btn_img = ( row.img )?`<button class='btn btn-success btn-sm' img='${ row.img }'> <i class="fa-solid fa-image"></i> </button>`:'';
+
+					return `${ btn_open } ${ btn_img }`; 
+				} 
+			}
 		];
 		const ajax = {
 			url: url,
@@ -332,7 +341,8 @@ $(document).ready( () => {
 		}
 	});
 
-	$('#table-refuels').on('click', '.btn', function(){
+	//Seleccionar una recarga
+	$('#table-refuels').on('click', '.btn-primary', function(){
 		const idrefuel = parseInt( $(this).attr('idrefuel') );
 
 		const req = ajaxRequest( ajaxSettingGen(`${url}${idrefuel}`, 'GET', headers_gen) );
@@ -383,6 +393,17 @@ $(document).ready( () => {
 		}, errors => {
 			handleErrors( errors );
 		})
+	});
+
+	//Ver una imagen previa
+	$('#table-refuels').on('click', '.btn-success', function(){
+		const img = $(this).attr('img');
+
+		$('#modal-img img').prop('src', '');
+		
+		$('#modal-img img').prop('src', `https://dg8dw0ohxnqbu.cloudfront.net/${img}`);
+
+		modal_img.modal('show');
 	});
 
 	$('#btn-upload-img').on('click', () => {
