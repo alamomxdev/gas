@@ -8,6 +8,8 @@ $(document).ready( () => {
 	let refuel_types = [];
 	let refuel_subtypes = [];
 
+	const refuel_plannings = {};
+
 	const url=`${apiObj.host}/api/refuels/`;
 
 	const headers_gen = {
@@ -63,6 +65,7 @@ $(document).ready( () => {
 			dataSrc: "refuels",
 			beforeSend: ( req ) => {
 				req.setRequestHeader('x-token', localStorage.getItem('x-token') );
+
 			},      
 			error: function( errors ){
 				handleErrors( errors );
@@ -137,21 +140,69 @@ $(document).ready( () => {
 			{ 
 				data: 'InvoicingStatus', 
 				render: ( data, type, row ) => { 
-													const fm_contract=( !row.VehicleDriverHistoryNumber )
-																										? ''
-																										: row.VehicleDriverHistoryNumber;  
+						const fm_contract=( !row.VehicleDriverHistoryNumber )
+																			? ''
+																			: row.VehicleDriverHistoryNumber;  
 
-													const idregion = row.PickUpRegionSrId;
-													const idsubregion = row.PickUpRegionId;
+						const idregion = row.PickUpRegionSrId;
+						const idsubregion = row.PickUpRegionId;
 
-													const region = row.PickUpRegionSr;
-													const subregion = row.PickUpRegion;
+						const region = row.PickUpRegionSr;
+						const subregion = row.PickUpRegion;
 
-													return `
-															<button class='btn btn-primary btn-sm' region='${ region }' subregion='${ subregion }' idregion='${ idregion }' idsubregion='${ idsubregion }' id economic_number='${ row.VehicleNumber }' fm_planning='${ row.SequenceNumber }' fm_contract='${ fm_contract }'> 
-																<i class='fa-solid fa-arrow-pointer'></i> 
-															</button>`; 
-												}
+						const idrefuel_type = parseInt( $('#refuel_type').val()?$('#refuel_type').val():0 );
+						const idrefuel_subtype = parseInt( $('#refuel_type').val()?$('#refuel_subtype').val():0 );
+
+						const plannings = refuel_plannings.refuel_plannings;
+
+						let button = 0;
+
+						if( idrefuel_type && idrefuel_subtype ){
+							const onid = [];
+							const onparent = [];
+
+							plannings.forEach( ( e, i, a ) => {
+								
+								if( e.idrefuel_type===idrefuel_subtype )
+									onid.push( e );
+
+								if( e.idrefuel_type===idrefuel_type )
+									onparent.push( e );
+							});
+				
+
+							if( onid.length > 0 ){
+								onid.forEach( ( element, index, array ) => {
+									if( element.idplanning_type === parseInt(row.PlanningType) ){
+										button = 1;
+
+										return;
+									}
+								});
+							}
+
+							if( onparent.length > 0 ){
+								onparent.forEach( ( element, index, array ) => {
+									if( element.idplanning_type === parseInt( row.PlanningType ) ){
+										button = 1;
+
+										return;
+									}
+
+									if( [ 26, 27 ].includes( element.idplanning_type ) && element.idplanning_type === parseInt( row.TypeId ) ){
+										button = 1;
+
+										return;
+									}
+								});
+							}
+						}
+
+						return ( button ) ?`
+								<button class='btn btn-primary btn-sm' region='${ region }' subregion='${ subregion }' idregion='${ idregion }' idsubregion='${ idsubregion }' id economic_number='${ row.VehicleNumber }' fm_planning='${ row.SequenceNumber }' fm_contract='${ fm_contract }'> 
+									<i class='fa-solid fa-arrow-pointer'></i> 
+								</button>`:''; 
+				}
 
 			}
 		];
@@ -161,8 +212,8 @@ $(document).ready( () => {
 			type : "GET",
 			dataSrc: "result",
 			beforeSend: ( req ) => {
-				req.setRequestHeader('x-token', localStorage.getItem('x-token') );
-			},      
+				req.setRequestHeader('x-token', localStorage.getItem('x-token') );				
+			},  
 			error: function( errors ){
 				handleErrors( errors );
 			}
@@ -226,9 +277,23 @@ $(document).ready( () => {
 		});
 	}, errors => {
 		handleErrors( errors );
-	})
+	});
+
+	//Refuel Plannings
+	const req_plannings = ajaxRequest( ajaxSettingGen(`${apiObj.host}/api/refueltypes/plannings`, 'GET', headers_gen) );
+	req_plannings.then( response => {
+		
+		refuel_plannings.planning_types = response.planning_types;
+		refuel_plannings.refuel_types = response.refuel_types;
+		refuel_plannings.refuel_plannings = response.refuel_plannings;
+
+	}, errors => {
+		handleErrors( errors );
+	});
 //############################################################
 
+//Modal de Refuel
+//############################################################
 	//Cambio de region en filtro
 	$('#filter_region').on('change', function(){
 		const region = parseInt($(this).val());
@@ -271,14 +336,20 @@ $(document).ready( () => {
 	//Buscar con ENTER
 	$("#input-search").on('keypress', (e)=>{
 		if( e.which===13 )
-			$('#btn-search').click();
+			$('#btn-search').click();	
 	});
 
 	//Obtener subtipos de carga
 	$('#refuel_type').on('change', function(){
 		const idparent = parseInt($(this).val());
 
+		emptyVehicle();
+
 		fillSubtype( idparent );
+	});
+
+	$('#refuel_subtype').on('change', function(){
+		emptyVehicle();
 	});
 
 	//Nuevo registro
@@ -298,7 +369,7 @@ $(document).ready( () => {
 			refuel_number 	: { value : $('#refuel').val(), required : true },
 			idrefuel_type	: { value : parseInt( $('#refuel_type').val() ), required : true },
 			idrefuel_subtype: { value : parseInt( $('#refuel_subtype').val() ), required : true },
-			idvehicle		: { value : parseInt( $('#vehicle').attr('idvehicle') ), required : true },
+			idvehicle		: { value : parseInt( $('#vehicle').attr('idvehicle') ) },
 			fm_planning		: { value : $('#fm_planning').val() },
 			fm_contract		: { value : $('#fm_contract').val() },
 			idregion 		: { value : parseInt( $('#region').attr('idregion') ) },
@@ -312,7 +383,16 @@ $(document).ready( () => {
 			comments 		: { value : $('#comments').val() }
 		}
 
-		const { pass, pass_data } = formInputsValidate(form);
+		let { pass, pass_data } = formInputsValidate(form);
+
+		console.log( form );
+
+		//SI es auto nuevo no necesita auto
+		if( form.idrefuel_subtype.value !== 15 && !form.idvehicle.value  ){
+			pass = false;
+
+			toastr.warning('Es requerido un auto para seguir con la carga');
+		}
 
 		if( pass ){
 			const entries = new Map( pass_data );
@@ -455,6 +535,7 @@ $(document).ready( () => {
 
 		modal_img.modal('show');
 	});
+//############################################################
 
 //MODAL DE TERJTAS
 //#####################################################################
@@ -548,35 +629,33 @@ $(document).ready( () => {
 //#####################################################################
 	//Mostrar modal para ver vehiculo
 	$('#btn-vehicle').on('click', () => {
-		modal_vehicles.modal('show');
-		modal.modal('hide');
+		const refuel_type = $('#refuel_type').val();
+		const refuel_subtype = $('#refuel_subtype').val();
 
-		const card_vehicle = $('#card').attr('economic_number');
+		if(  refuel_type && refuel_subtype ){
+			modal_vehicles.modal('show');
+			modal.modal('hide');
 
-		$('#modal-vehicles input').val('');
-		$('#vehicle-number').attr( 'idvehicle', '' );
+			const card_vehicle = $('#card').attr('economic_number');
+			
 
-		if( card_vehicle ){
-			$('#vehicle-search').val( card_vehicle );
+			$('#modal-vehicles input').val('');
+			$('#vehicle-number').attr( 'idvehicle', '' );
+
+			if( card_vehicle ){
+				$('#vehicle-search').val( card_vehicle );
+			}
+
+			vehicle_table.ajax.url(`${ ajax_v.url }`).load();
 		}
+		else
+			toastr.warning('Tipo de carga y proposito requeridos');
 
-		vehicle_table.ajax.url(`${ ajax_v.url }`).load();
 	});
 
 	//Borrar input de busqueda de vehiculo
 	$('#btn-erase-vehicle').on('click', () => {
-		$('#vehicle').val('');
-		$('#vehicle').attr('idvehicle', '');
-		$('#vehicle').attr('economic_number', '');
-
-
-		$('#fm_planning').val('');
-		$('#fm_contract').val('');
-
-		$('#region').val('');
-		$('#region').attr('idregion', '');
-		$('#subregion').val('');
-		$('#subregion').attr('idsubregion', '');
+		emptyVehicle();
 	});
 
 	//Cerrar modal de vehiculos
@@ -741,4 +820,18 @@ $(document).ready( () => {
 		}
 	}
 
+	const emptyVehicle = () => {
+		$('#vehicle').val('');
+		$('#vehicle').attr('idvehicle', '');
+		$('#vehicle').attr('economic_number', '');
+
+
+		$('#fm_planning').val('');
+		$('#fm_contract').val('');
+
+		$('#region').val('');
+		$('#region').attr('idregion', '');
+		$('#subregion').val('');
+		$('#subregion').attr('idsubregion', '');
+	}
 });

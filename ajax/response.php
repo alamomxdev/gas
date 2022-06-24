@@ -13,7 +13,7 @@
 	$fm_l = new PDO("sqlsrv:server = $serverName; Database = $databaseName;", $uid, $pwd);
 
 	$today      = date('Y-m-d');
-    $yesterday  = date('Y-m-d', strtotime('-15 days'));
+    $yesterday  = date('Y-m-d', strtotime('-300 days'));
 
 	$sql="select vh.SequenceNumber as VehicleNumber, vh.ChassisNumber,
         vh.VehicleTypeId, vh_types.Name as SIPP, vh.ModelId, vh_models.Name as Model, 
@@ -41,7 +41,7 @@
         else '404'
         end as SquenceStatus,
         Case when vdhtt.Id = 26 then 'Reservaciones' else 'Planeacion' end as TipoEstatus, 
-        vdht.Name as Type,
+        vdht.Name as Type, vdht.Id as PlanningType, vdht.TypeId,
         CAST(SWITCHOFFSET(vdh.StartTime, SUBSTRING(CAST(CAST(vdh.StartTime AS DATETIME) AT TIME ZONE isnull(pick_l.timezone, t.tenanttimezone) AS VARCHAR), 25, 6)) AS DATETIME) as StartTime, 
         CAST(SWITCHOFFSET(vdh.ActualStartTime, SUBSTRING(CAST(CAST(vdh.ActualStartTime AS DATETIME) AT TIME ZONE isnull(pick_l.timezone, t.tenanttimezone) AS VARCHAR), 25, 6)) AS DATETIME) as ActualStartTime,
         CAST(SWITCHOFFSET(vdh.EndTime, SUBSTRING(CAST(CAST(vdh.EndTime AS DATETIME) AT TIME ZONE isnull(drop_l.timezone, t.tenanttimezone) AS VARCHAR), 25, 6)) AS DATETIME) as EndTime, 
