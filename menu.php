@@ -525,16 +525,19 @@ $(document).ready( function(){
   const modal_load = $('#modal-load');
   modal_load.modal({backdrop: 'static', keyboard: false, show:true });
 
-  $(document).ajaxStart( () => {
-        //console.log( 'Start: ', new Date() );
+  $(document).ajaxError( function( event, jqxhr, settings, thrownError ){
+        toastr.error( `${ event.type } ${ jqxhr.responseText } ${ settings.types }` );
+
+
+        modal_load.modal('hide');
+  }).ajaxStart( () => {
+        //console.log( 'Start: ' );
 
         modal_load.modal('show');
 
   }).ajaxStop( () => {
-        //console.log( 'Stop: ', new Date() );
+        //console.log( 'Stop: ' );
 
-        modal_load.modal('hide');
-  }).ajaxError( () => {
         modal_load.modal('hide');
   });
 

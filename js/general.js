@@ -63,7 +63,14 @@ const handleErrors = ( errors ) => {
 	//console.log( errors );
 	//console.log( status );
 	//console.log( statusText );
-	console.log( responseJSON );
+	//console.log( responseJSON );
+	//console.log( errors ); 
+
+	if( !responseJSON ){
+		toastr.warning('Error desconocido en solicitud');
+
+		return;
+	}
 
 	if( !responseJSON.msg )
 		responseJSON.msg = responseJSON.error;

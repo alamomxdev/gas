@@ -121,10 +121,10 @@ $(document).ready( () => {
 			{ data: 'Type' },
 			{ data: 'PickUpLocation' },
 			{ data: 'DropOffLocation' },
-			{ data: 'StartTime', render:( data, type, row ) =>{ return FMDate( data ); } },
-			{ data: 'EndTime', render:( data, type, row ) =>{ return FMDate( data ); } },
-			{ data: 'ActualStartTime', render:( data, type, row ) =>{ return FMDate( data ); } },
-			{ data: 'ActualEndTime', render:( data, type, row ) =>{ return FMDate( data ); } },
+			{ data: 'StartTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
+			{ data: 'EndTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
+			{ data: 'ActualStartTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
+			{ data: 'ActualEndTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
 			{ 
 				data: 'InvoicingStatus', 
 				render: ( data, type, row ) => { 
@@ -589,7 +589,8 @@ $(document).ready( () => {
 				$('#vehicle-version').val( vehicle.version );
 				$('#vehicle-chassis_number').val( vehicle.chassis_number );
 
-				vehicle_table.ajax.url(`${ apiObj.host }/api/fm/vehiclehistory/${ economic_number }`).load();
+				//vehicle_table.ajax.url(`${ apiObj.host }/api/fm/vehiclehistory/${ economic_number }`).load();
+				vehicle_table.ajax.url(`${ apiObj.site }/ajax/response.php?e=${ economic_number }`).load();
 
 			}, errors => {
 				handleErrors( errors );
@@ -670,6 +671,18 @@ $(document).ready( () => {
 
 
 		const date = data.split('T');
+
+		const d = date[0].split('-');
+
+		return `${ d[2] }/${ d[1] }/${ d[0] } ${ date[1].slice(0, -8) }`;
+	}
+
+	const FMDateRes = ( data ) =>{
+		if( !data )
+			return null;
+
+
+		const date = data.split(' ');
 
 		const d = date[0].split('-');
 
