@@ -488,16 +488,6 @@ $(document).ready( () => {
 		})
 	});
 
-	//Ver una imagen previa
-	$('#table-refuels').on('click', '.btn-success', function(){
-		const img = $(this).attr('img');
-
-		$('#modal-img img').prop('src', '');
-		
-		$('#modal-img img').prop('src', `https://dg8dw0ohxnqbu.cloudfront.net/${img}`);
-
-		modal_img.modal('show');
-	});
 
 	$('#btn-upload-img').on('click', () => {
 		const file = $('#img').prop('files');
@@ -537,6 +527,17 @@ $(document).ready( () => {
 		}
 	});
 
+	//Ver una imagen previa
+	$('#table-refuels').on('click', '.btn-success', function(){
+		const img = $(this).attr('img');
+
+		$('#modal-img img').prop('src', '');
+		
+		$('#modal-img img').prop('src', `${apiObj.cdn}/${img}`);
+
+		modal_img.modal('show');
+	});
+
 	$('#btn-view-img').on('click', function(){
 		const img = $(this).attr('img');
 
@@ -544,7 +545,7 @@ $(document).ready( () => {
 
 		$('#modal-img img').prop('src', '');
 		
-		$('#modal-img img').prop('src', `${apiObj.cdn}}/${img}`);
+		$('#modal-img img').prop('src', `${apiObj.cdn}/${img}`);
 
 		modal_img.modal('show');
 	});
