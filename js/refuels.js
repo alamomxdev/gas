@@ -544,7 +544,7 @@ $(document).ready( () => {
 
 		$('#modal-img img').prop('src', '');
 		
-		$('#modal-img img').prop('src', `https://dg8dw0ohxnqbu.cloudfront.net/${img}`);
+		$('#modal-img img').prop('src', `${apiObj.cdn}}/${img}`);
 
 		modal_img.modal('show');
 	});
