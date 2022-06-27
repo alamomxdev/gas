@@ -41,7 +41,12 @@ $(document).ready( () => {
 			{ data: 'supplier' },
 			{ data: 'refuel_type' },
 			{ data: 'economic_number' },
-			{ data: 'fm_planning' },
+			{ 
+				data: 'fm_planning',
+				render : ( data, type, row ) => {
+					return ` ${ data }${ ( row.fm_contract )?` / ${row.fm_contract}`:'' } `;
+				} 
+			},
 			{ data: 'subregion' },
 			{ data: 'refuel_datetime' },
 			{ data: 'refuel_createdat' },
