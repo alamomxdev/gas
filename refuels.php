@@ -93,7 +93,7 @@
 
 </div>
 
-<!-- Div Informacion MODAL -->
+<!-- Div Informacion REFUEL MODAL -->
 <div class="modal" id="modal-refuel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
 
@@ -190,6 +190,11 @@
                         <div class="col col-3">
                             <label class="form-label" for="fm_contract">Contrato</label>
                             <input type="text" class="form-control form-control-sm text-uppercase" id="fm_contract" disabled>
+                        </div>
+
+                        <div class="col col-3">
+                            <label class="form-label" for="planning_type">Tipo</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="planning_type" disabled>
                         </div>
                     </div>
 
@@ -351,6 +356,11 @@
                     <div class="col-auto">
                         <button class="btn btn-sm btn-primary" id="btn-search-vehicle">
                             <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+
+                        <button class="btn btn-sm btn-primary" id="btn-select-vehicle">
+                            <i class="fa-solid fa-arrow-pointer"></i>
+                            Seleccionar
                         </button>
                     </div>
                 </div>
