@@ -157,6 +157,8 @@ $(document).ready( () => {
 
 						let button = 0;
 
+						$('#btn-select-vehicle').addClass('d-none');
+
 						if( idrefuel_type && idrefuel_subtype ){
 							const onid = [];
 							const onparent = [];
@@ -199,7 +201,16 @@ $(document).ready( () => {
 						}
 
 						return ( button ) ?`
-								<button class='btn btn-primary btn-sm' region='${ region }' subregion='${ subregion }' idregion='${ idregion }' idsubregion='${ idsubregion }' id economic_number='${ row.VehicleNumber }' fm_planning='${ row.SequenceNumber }' fm_contract='${ fm_contract }'> 
+								<button class='btn btn-primary btn-sm' 
+									region='${ region }' 
+									subregion='${ subregion }' 
+									idregion='${ idregion }' 
+									idsubregion='${ idsubregion }' 
+									economic_number='${ row.VehicleNumber }' 
+									fm_planning='${ row.SequenceNumber }' 
+									fm_contract='${ fm_contract }'
+									idplanning_type='${ row.PlanningType }'
+									planning_type='${ row.Type }'>
 									<i class='fa-solid fa-arrow-pointer'></i> 
 								</button>`:''; 
 				}
@@ -337,6 +348,7 @@ $(document).ready( () => {
 	$("#input-search").on('keypress', (e)=>{
 		if( e.which===13 )
 			$('#btn-search').click();	
+	
 	});
 
 	//Obtener subtipos de carga
@@ -372,6 +384,7 @@ $(document).ready( () => {
 			idvehicle		: { value : parseInt( $('#vehicle').attr('idvehicle') ) },
 			fm_planning		: { value : $('#fm_planning').val() },
 			fm_contract		: { value : $('#fm_contract').val() },
+			idplanning_type	: { value : ( $('#planning_type').attr('idplanning_type') )?parseInt( $('#planning_type').attr('idplanning_type') ):'' },
 			idregion 		: { value : parseInt( $('#region').attr('idregion') ) },
 			idsubregion 	: { value : parseInt( $('#subregion').attr('idsubregion') ) },
 			idregion_cost 	: { value : parseInt( $('#region_cost').val() ), required : true },
@@ -385,10 +398,8 @@ $(document).ready( () => {
 
 		let { pass, pass_data } = formInputsValidate(form);
 
-		console.log( form );
-
-		//SI es auto nuevo no necesita auto
-		if( form.idrefuel_subtype.value !== 15 && !form.idvehicle.value  ){
+		//SI es auto nuevo no necesita planeacion
+		if( form.idrefuel_subtype.value !== 15 && !form.fm_planning.value  ){
 			pass = false;
 
 			toastr.warning('Es requerido un auto para seguir con la carga');
@@ -454,6 +465,8 @@ $(document).ready( () => {
 			$('#subregion_cost').val( refuel.idsubregion_cost );
 			$('#fm_planning').val( refuel.fm_planning );
 			$('#fm_contract').val( refuel.fm_contract );
+			$('#planning_type').val( refuel.planning_type );
+			$('#planning_type').attr('idplanning_type', refuel.idplanning_type );
 			$('#refuel_date').val( refuel.refuel_date );
 			$('#refuel_time').val( refuel.refuel_time );
 			$('#amount').val( refuel.amount );
@@ -629,8 +642,10 @@ $(document).ready( () => {
 //#####################################################################
 	//Mostrar modal para ver vehiculo
 	$('#btn-vehicle').on('click', () => {
-		const refuel_type = $('#refuel_type').val();
+		const refuel_type = parseInt( $('#refuel_type').val() );
 		const refuel_subtype = $('#refuel_subtype').val();
+
+		$('#btn-select-vehicle').addClass('d-none');
 
 		if(  refuel_type && refuel_subtype ){
 			modal_vehicles.modal('show');
@@ -638,6 +653,10 @@ $(document).ready( () => {
 
 			const card_vehicle = $('#card').attr('economic_number');
 			
+			//Carga de auto nuevo
+			if( refuel_type===4 ){
+				$('#btn-select-vehicle').removeClass('d-none');
+			}
 
 			$('#modal-vehicles input').val('');
 			$('#vehicle-number').attr( 'idvehicle', '' );
@@ -650,7 +669,6 @@ $(document).ready( () => {
 		}
 		else
 			toastr.warning('Tipo de carga y proposito requeridos');
-
 	});
 
 	//Borrar input de busqueda de vehiculo
@@ -701,6 +719,19 @@ $(document).ready( () => {
 		}
 	});
 
+	//Seleccionar vehiculo sin planeacion
+	$('#btn-select-vehicle').on('click', () => {
+		const idvehicle = $('#vehicle-number').attr('idvehicle');
+		const economic_number = $(this).attr('economic_number');
+
+		$('#vehicle').val( economic_number );
+		$('#vehicle').attr('idvehicle', idvehicle);
+		$('#vehicle').attr('economic_number', economic_number);
+
+		modal_vehicles.modal('hide');
+		modal.modal('show');
+	});
+
 	//Seleccionar un vehiculo
 	$('#table-vehicle').on('click', '.btn', function(){
 		const idvehicle = $('#vehicle-number').attr('idvehicle');
@@ -713,9 +744,15 @@ $(document).ready( () => {
 		const idregion = $(this).attr('idregion');
 		const idsubregion = $(this).attr('idsubregion');
 
+		const planning_type = $(this).attr('planning_type');
+		const idplanning_type = $(this).attr('idplanning_type');
+
 		$('#vehicle').val( economic_number );
 		$('#vehicle').attr('idvehicle', idvehicle);
 		$('#vehicle').attr('economic_number', economic_number);
+
+		$('#planning_type').val( planning_type );
+		$('#planning_type').attr('idplanning_type', idplanning_type);
 
 		$('#fm_planning').val( fm_planning );
 		$('#fm_contract').val( fm_contract );
@@ -724,7 +761,6 @@ $(document).ready( () => {
 		$('#region').attr('idregion', idregion);
 		$('#subregion').val(subregion);
 		$('#subregion').attr('idsubregion', idsubregion);
-
 
 		modal_vehicles.modal('hide');
 		modal.modal('show');
@@ -747,6 +783,8 @@ $(document).ready( () => {
 		$('#card').attr('idcard', '');
 		$('#card').attr('economic_number', '');
 		$('#card').attr('idvehicle', '');
+
+		$('#planning_type').attr('idplanning_type', '');
 
 		$('#hi_idrefuel').val('');
 
@@ -828,6 +866,9 @@ $(document).ready( () => {
 
 		$('#fm_planning').val('');
 		$('#fm_contract').val('');
+
+		$('#planning_type').val( '' );
+		$('#planning_type').attr('idplanning_type', '');
 
 		$('#region').val('');
 		$('#region').attr('idregion', '');

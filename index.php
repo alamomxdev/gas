@@ -205,7 +205,7 @@ $(document).ready( function(){
         const valid_token = validateJWT( localStorage.getItem('x-token') );
 
         valid_token.then( response => {
-            window.location = `${apiObj.site}/menu.php`;
+            window.location = `${apiObj.site}menu.php`;
         }, (errors) => {
             localStorage.clear();
         });
