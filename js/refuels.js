@@ -713,8 +713,8 @@ $(document).ready( () => {
 				$('#vehicle-version').val( vehicle.version );
 				$('#vehicle-chassis_number').val( vehicle.chassis_number );
 
-				//vehicle_table.ajax.url(`${ apiObj.host }/api/fm/vehiclehistory/${ economic_number }`).load();
-				vehicle_table.ajax.url(`${ apiObj.site }/ajax/response.php?e=${ economic_number }`).load();
+				vehicle_table.ajax.url(`${ apiObj.host }/api/fm/vehiclehistory/${ economic_number }`).load();
+				//vehicle_table.ajax.url(`${ apiObj.site }/ajax/response.php?e=${ economic_number }`).load();
 
 			}, errors => {
 				handleErrors( errors );
