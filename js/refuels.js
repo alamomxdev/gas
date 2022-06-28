@@ -44,7 +44,7 @@ $(document).ready( () => {
 			{ 
 				data: 'fm_planning',
 				render : ( data, type, row ) => {
-					return ` ${ data }${ ( row.fm_contract )?` / ${row.fm_contract}`:'' } `;
+					return ` ${ (data)?data:'' }${ ( row.fm_contract )?` / ${row.fm_contract}`:'' } `;
 				} 
 			},
 			{ data: 'subregion' },
