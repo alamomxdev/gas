@@ -138,10 +138,10 @@ $(document).ready( () => {
 			{ data: 'Type' },
 			{ data: 'PickUpLocation' },
 			{ data: 'DropOffLocation' },
-			{ data: 'StartTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
-			{ data: 'EndTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
-			{ data: 'ActualStartTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
-			{ data: 'ActualEndTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
+			{ data: 'StartTime', render:( data, type, row ) =>{ return FMDate( data ); } },
+			{ data: 'EndTime', render:( data, type, row ) =>{ return FMDate( data ); } },
+			{ data: 'ActualStartTime', render:( data, type, row ) =>{ return FMDate( data ); } },
+			{ data: 'ActualEndTime', render:( data, type, row ) =>{ return FMDate( data ); } },
 			{ 
 				data: 'InvoicingStatus', 
 				render: ( data, type, row ) => { 
