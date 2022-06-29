@@ -161,10 +161,9 @@
 </style>
 <body>
     <div class="container">
-        <div class="card card-container">
+        <div class="card card-container" id="card_login">
                 
             <h5 class='card-title'><span style="color:grey;">Gas</span> <span style="color:skyblue;">Control</span></h5>
-
            
             <form class="form-signin">
                 <span id="reauth-email" class="reauth-email"></span>
@@ -177,11 +176,84 @@
                 </div> -->
                 <button class="btn btn-lg btn-primary btn-block btn-signin" id="btn-login">Ingresar</button>
             </form><!-- /form -->
-            <!-- <a href="#" class="forgot-password">
+            <a href="#" class="forgot-password" id="a_recovery">
                 ¿Olvid&oacute; su contraseña?
-            </a> -->
+            </a>
         </div><!-- /card-container -->
+
+
+        <div class="card card-container d-none" id="card_recovery">
+            <h5 class='card-title'><span style="color:grey;">Gas</span> <span style="color:skyblue;">Control</span></h5>
+
+            <form class="form-signin">
+                <span id="reauth-email" class="reauth-email"></span>
+                <input type="email" id="inputEmailRec" class="form-control" placeholder="Email" required autofocus>
+                <button class="btn btn-lg btn-primary btn-block btn-signin" id="btn-recovery">Recuperar</button>
+            </form><!-- /form -->
+
+            <a href="#" class="forgot-password" id="a_return">
+                Regresar
+            </a>
+        </div>
+
+        <div class="card card-container d-none" id="card_change">
+            <h5 class='card-title'><span style="color:grey;">Gas</span> <span style="color:skyblue;">Control</span></h5>
+
+            <form class="form-signin">
+                <span id="reauth-email" class="reauth-email"></span>
+                <input type="password" id="input-current-password" class="form-control" placeholder="Clave temporal" required autofocus>
+                <input type="password" id="input-new-password" class="form-control" placeholder="Nueva clave" required autofocus>
+                <input type="password" id="input-new-password2" class="form-control" placeholder="Confirmacion" required autofocus>
+                <button class="btn btn-lg btn-primary btn-block btn-signin" id="btn-change">Cambiar clave</button>
+            </form><!-- /form -->
+
+        </div>
+
     </div><!-- /container -->
+
+    <div class="modal" id="modal-load" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+
+            <div class="modal-content">
+
+                  <div class="modal-body">
+
+                      <div class="text-center">
+                          <div class="spinner-grow text-primary" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-secondary" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-success" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-danger" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-warning" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-info" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+
+                          <div class="spinner-grow text-dark" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+                      </div>
+
+                  </div>
+
+            </div>
+
+        </div>
+    </div>
 </body>
 </html>
 
@@ -246,11 +318,19 @@ $(document).ready( function(){
             .done( ( response ) => {
                 toastr.success('Credenciales de acceso validades con exito');
 
-                localStorage.setItem('x-token', response.token);
-
                 $(this).prop('disabled', false);
 
-                window.location = apiObj.site+'menu.php';
+                localStorage.setItem('x-token', response.token);
+                localStorage.setItem('uid', response.uid);
+
+                if( response.reset ){
+                    $('#card_login, #card_recovery').addClass('d-none');
+
+                    $('#card_change').removeClass('d-none');
+                }
+                else{
+                    window.location = apiObj.site+'menu.php';
+                }
             })
             .fail( ( errors ) => {
                 const err = errors.responseJSON;
@@ -267,6 +347,123 @@ $(document).ready( function(){
                     });
                 }
             });
+    });
+
+    $('#a_recovery').on('click', (e) => {
+        e.preventDefault();
+
+        $('#card_login input').val('');
+
+        $('#card_login').addClass('d-none');
+        $('#card_recovery').removeClass('d-none');
+    });
+
+    $('#a_return').on('click', (e) => {
+        e.preventDefault();
+
+        $('#card_recovery input').val('');
+
+        $('#card_recovery').addClass('d-none');
+        $('#card_login').removeClass('d-none');
+    });
+
+    $('#btn-recovery').on('click', (e) => {
+        e.preventDefault();
+
+        const email = $('#inputEmailRec').val();
+
+        if( email==='' ){
+            toastr.warning('El correo electronico de recuperacion es requerido');
+
+            return;
+        }
+
+        const settings = {
+            url     : `${ apiObj.host }/api/users/recoverpass/${ email }`,
+            method  : 'PUT',
+            timeot  : 0,
+            data    : JSON.stringify({ email })
+        }
+
+        $.ajax( settings )
+                        .done( response => {
+                            toastr.success(`Una nueva clave temporal a sido enviada a su correo ${ email }`);
+                        } )
+                        .fail( errors => {
+                            const err = errors.responseJSON;
+
+                            if( err.msg ){
+                                toastr.error( err.msg );
+                            }
+
+                            if( err.errors ){
+                                $( err.errors ).each( (i, v) => {
+                                    toastr.error( v.msg, `El ${v.param} con valor ${ (v.value==='')?'VACIO':v.value } incorrecto` )
+                                });
+                            }
+                        } )
+    });
+
+    $('#btn-change').on('click', (e) => {
+        e.preventDefault();
+
+        const current = $('#input-current-password').val();
+        const password = $('#input-new-password').val();
+        const password2 = $('#input-new-password2').val();
+
+        if( current==='' || password==='' || password2==='' )
+            toastr.error('Todas los campos son requeridos');
+        else if( password2!==password )
+            toastr.warning('La nueva clave y su confirmacion no concuerdan');
+        else{
+            const settings = {
+                url     : `${ apiObj.host }/api/users/pass/${ localStorage.getItem('uid') }`,
+                method  : 'PUT',
+                timeot  : 0,
+                headers :{
+                    'x-token': localStorage.getItem('x-token'),
+                    'Content-Type': 'application/json'
+                },
+                data    : JSON.stringify({ current, password })
+            }
+
+            $.ajax( settings )
+                            .done( response => {
+                                localStorage.removeItem('uid');
+
+                                window.location = apiObj.site+'menu.php';
+                            } )
+                            .fail( errors => {
+                                const err = errors.responseJSON;
+
+                                if( err.msg ){
+                                    toastr.error( err.msg );
+                                }
+
+                                if( err.errors ){
+                                    $( err.errors ).each( (i, v) => {
+                                        toastr.error( v.msg, `El ${v.param} con valor ${ (v.value==='')?'VACIO':v.value } incorrecto` )
+                                    });
+                                }
+                            } );
+        }
+    });
+
+    const modal_load = $('#modal-load');
+    modal_load.modal({backdrop: 'static', keyboard: false, show:true });
+
+    $(document).ajaxError( function( event, jqxhr, settings, thrownError ){
+        //toastr.error( `${ event.type } ${ jqxhr.responseText } ${ settings.type }` );
+        modal_load.modal('hide');
+    }).ajaxStart( () => {
+        //console.log( 'Start: ' );
+
+        modal_load.modal('show');
+
+    }).ajaxStop( () => {
+        //console.log( 'Stop: ' );
+
+        modal_load.modal('hide');
     });
 });
 

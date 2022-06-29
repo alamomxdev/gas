@@ -106,7 +106,9 @@ $(document).ready( () =>{
 		form.reset();
 
 		$('#hi_iduser').val('');
-		$('#sp-uid, #child_regions').html('')
+		$('#sp-uid, #child_regions').html('');
+
+		$('#btn-reset-password').addClass('d-none');
 
 		modal.modal('show');
 	});
@@ -147,6 +149,8 @@ $(document).ready( () =>{
 			$('#regions').val( user_regions );
 			$('#child_regions').val( user_subregions );
 
+			$('#btn-reset-password').removeClass('d-none');
+
 			modal.modal('show');
 		}, errors => {
 			handleErrors( errors );
@@ -167,22 +171,8 @@ $(document).ready( () =>{
 			status 			: { value:$('#status').is(':checked'), required: false }, 
 			email 			: { value:$('#email').val(), required: true }, 
 			idrole 			: { value:$('#role').val(), required: true }, 
-			password 		: { value:$('#password').val(), required: false },
-			password_confirm: { value:$('#password_confirm').val(), required: false },
 			regions 		: { value:[ r, rc ], required:false }
 		};
-
-		if( form.password.value && form.password.value!==form.password_confirm.value ){
-			toastr.warning('La contraseña y su confirmacion no coinciden');
-
-			return;
-		}
-
-		if( uid==='' && form.password.value=='' ){
-			toastr.warning('La contraseña es obligatoria en altas');
-
-			return;
-		}
 
 		const { pass, pass_data } = formInputsValidate(form);
 
@@ -215,5 +205,23 @@ $(document).ready( () =>{
 			});
 		}
 
+	});
+
+	$('#btn-reset-password').on('click', () => {
+		const uid = $('#hi_iduser').val();
+
+		const headers = {
+			'x-token'		: localStorage.getItem('x-token')
+		}
+
+		const settings = ajaxSettingGen( `${url}/resetpass/${uid}`, 'PUT', headers, {} );
+
+		const request = ajaxRequest( settings );
+
+		request.then( response => {
+			toastr.success('Clave de usuario restablecida con exito');
+		}, errors => {
+			handleErrors( errors );
+		} )
 	});
 });
