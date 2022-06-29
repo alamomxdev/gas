@@ -7,7 +7,7 @@
     <div class="row g-3 align-items-center">
 
         <div class="col-auto">
-            <label for="input-search" class="col-form-label "># Carga</label>
+            <label for="input-search" class="col-form-label "># Folio/Ticket</label>
         </div>
 
         <div class="col-auto">
@@ -124,7 +124,7 @@
                         </div>
 
                         <div class="col col-4">
-                            <label class="form-label" for="card1"># Carga <span class="small text-danger">*</span></label>
+                            <label class="form-label" for="card1"># Folio/Ticket <span class="small text-danger">*</span></label>
                             <input type="text" class="form-control form-control-sm text-uppercase" id="refuel">
                             <input type="hidden" id="hi_idrefuel">
                         </div>
@@ -137,7 +137,7 @@
                         </div>
 
                         <div class="col col-4">
-                            <label class="form-label" for="refuel_type">Propsito <span class="small text-danger">*</span></label>
+                            <label class="form-label" for="refuel_type">Sub categoria <span class="small text-danger">*</span></label>
                             <select class="form-select form-select-sm" id="refuel_subtype"></select>
                         </div>
 
@@ -241,8 +241,9 @@
                     <div class="row d-none" id="refuel_attached">
                         <div class="col col-12">
 
-                            <div class="input-group">
-                                <input type="file" class="form-control form-control-sm" id="img" accept="image/*">
+                            <div class="input-group d-flex justify-content-end">
+                                <label class="input-group-text border border-secondary" style="width: 90%;" for="img" id="lb_img">Seleccione un archivo</label>
+                                <input type="file" class="form-control form-control-sm d-none" id="img" accept="image/*,.pdf">
 
                                 <button class="btn btn-sm btn-primary" id="btn-upload-img">
                                     <i class="fa-solid fa-cloud-arrow-up"></i>

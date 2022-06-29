@@ -56,9 +56,13 @@ $(document).ready( () => {
 			{ 
 				data: 'idrefuel', 
 				render: ( data, type, row ) => { 
+					
+
 					const btn_open = `<button class='btn btn-primary btn-sm' idrefuel='${ data }'> <i class="fa-solid fa-pencil"></i> </button>`;
 
-					const btn_img = ( row.img )?`<button class='btn btn-success btn-sm' img='${ row.img }'> <i class="fa-solid fa-image"></i> </button>`:'';
+					const ext = ( row.img )?row.img.split('.'):[];
+
+					const btn_img = ( row.img )?`<button class='btn btn-success btn-sm' img='${ row.img }'> <i class="fa-solid ${ ext[1]==='pdf'?'fa-file-pdf':'fa-image' } "></i> </button>`:'';
 
 					return `${ btn_open } ${ btn_img }`; 
 				} 
@@ -480,8 +484,17 @@ $(document).ready( () => {
 
 			$('#btn-view-img').attr('img', refuel.img );
 
-			if( !refuel.img )
+			if( !refuel.img ){
 				$('#btn-view-img').prop('disabled', true);
+				$('#btn-view-img').html(`<i class="fa-solid fa-image"></i>`);
+			}
+			else{
+				const ext = refuel.img.split('.');
+
+				$('#lb_img').html( refuel.img );
+
+				$('#btn-view-img').html(`<i class="fa-solid ${ (ext[1]==='pdf')?'fa-file-pdf':'fa-image' } "></i>`);
+			}
 
 			$('#refuel_attached').removeClass('d-none');
 
@@ -534,25 +547,46 @@ $(document).ready( () => {
 
 	//Ver una imagen previa
 	$('#table-refuels').on('click', '.btn-success', function(){
+		const ext = $(this).attr('img').split('.');
 		const img = $(this).attr('img');
 
-		$('#modal-img img').prop('src', '');
-		
-		$('#modal-img img').prop('src', `${apiObj.cdn}/${img}`);
+		if( ext[1]==='pdf' ){
+			window.open( `${apiObj.cdn}/${img}` );
+		}
+		else{
+			$('#modal-img img').prop('src', '');
+			
+			$('#modal-img img').prop('src', `${apiObj.cdn}/${img}`);
 
-		modal_img.modal('show');
+			modal_img.modal('show');
+		}
+		
 	});
 
 	$('#btn-view-img').on('click', function(){
+		const ext = $(this).attr('img').split('.');
 		const img = $(this).attr('img');
 
-		//window.open('https://dg8dw0ohxnqbu.cloudfront.net/'+img);
+		if( ext[1]==='pdf' ){
+			window.open( `${apiObj.cdn}/${img}` );
+		}
+		else{
+			$('#modal-img img').prop('src', '');
+			
+			$('#modal-img img').prop('src', `${apiObj.cdn}/${img}`);
 
-		$('#modal-img img').prop('src', '');
-		
-		$('#modal-img img').prop('src', `${apiObj.cdn}/${img}`);
+			modal_img.modal('show');
+		}
+	});
 
-		modal_img.modal('show');
+	$('#img').on('change', function(){
+		const file = $('#img').prop('files');
+
+		$('#lb_img').html('Seleccione un archivo');
+
+		if( file.length>0 ){
+			$('#lb_img').html( file[0].name );
+		}
 	});
 //############################################################
 
@@ -807,6 +841,8 @@ $(document).ready( () => {
 		$('#btn-view-img').attr('img', '');
 
 		$('#btn-view-img').prop('disabled', false);
+
+		$('#lb_img').html('Seleccione un archivo');
 	}
 
 	const FMDate = ( data ) =>{
