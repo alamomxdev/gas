@@ -8,7 +8,7 @@ const apiObj = {
 	site : 'https://tecnologiasalamo.com.mx/TEST_gascontrol/'*/
 }
 
-genObj.lenguage = {
+genObj.language = {
 		            "processing": "Procesando...",
 				    "lengthMenu": "Mostrar _MENU_ registros",
 				    "zeroRecords": "No se encontraron resultados",
@@ -99,13 +99,16 @@ const handleErrors = ( errors ) => {
 
 //Genera una DataTable()
 const dataTable = ( opt, ajax, columns ) => {
+	console.log( opt );
+
 	const table = $(`#${ opt.id }`).dataTable({
 		lengthMenu		: opt.lengths,
-		lenguage		: opt.lenguage,
+		language		: opt.language,
 		bFilter			: false,
 		buttons			: opt.buttons,
 		paging			: false,
 		ajax			: ajax,
+		bDestroy		: true,
 		columns			: columns,
 		iDisplayLength	: opt.limit ,//Paginación
 		scrollY			: opt.scrollY,

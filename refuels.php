@@ -41,6 +41,10 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
 
+            <button class="btn btn-success btn-sm" id="btn-excel">
+                <i class="fa-solid fa-file-excel"></i>
+            </button>
+
             <button class="btn btn-success btn-sm" id="btn-add"> 
                 <i class="fa-solid fa-plus"></i> 
             </button>
@@ -55,7 +59,7 @@
             <thead class="small">
                 <tr>
                     <th scope="col"># Tarjeta</th>
-                    <th scope="col"># Carga</th>
+                    <th scope="col"># Ticket</th>
                     <th scope="col">Proveedor</th>
                     <th scope="col">Tipo</th>
                     <th scope="col">Vehiculo</th>

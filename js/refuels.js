@@ -31,6 +31,7 @@ $(document).ready( () => {
 		const opts = {
 			lengths : [ 20, 30, 50, 75, 100 ],
 			language: genObj.language,
+			dom: '<Bl<f>rtip>',
 			buttons : genObj.buttons,
 			limit : 20,
 			id    : 'table-refuels'
@@ -80,6 +81,8 @@ $(document).ready( () => {
 				handleErrors( errors );
 			}
 		}
+
+		//console.log( opts );
 
 		const table = dataTable( opts, ajax, columns );
 	//GENERARA LA TABLA DE RECARGAS
@@ -346,6 +349,26 @@ $(document).ready( () => {
 		const u = objTOurl( data );
 
 		table.ajax.url(`${ url }?${ u }`).load(); 
+	});
+
+	$('#btn-excel').on('click', () => {
+		const data = {
+			refuel_number 	: $('#input-search').val(),
+			idregion 		: ( $('#filter_region').val() )?parseInt( $('#filter_region').val() ):'',
+			idsubregion 	: ( $('#filter_subregion').val() )?parseInt( $('#filter_subregion').val() ):'',
+			f1 				: $('#filter-f1').val(),
+			f2 				: $('#filter-f2').val()
+		}
+
+		const u = objTOurl( data );
+
+		const request = ajaxRequest( ajaxSettingGen(`${url}/excel?${ u }`, 'GET', headers_gen) );
+
+		request.then( res => {
+			toastr.success(`Archivo enviado a su cuenta de correo <i class="fa-solid fa-envelope-circle-check"></i>`);
+		}, errors => {
+			handleErrors(errors);
+		} )
 	});
 
 	//Calculo de litros
