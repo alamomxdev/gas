@@ -82,8 +82,6 @@ $(document).ready( () => {
 			}
 		}
 
-		//console.log( opts );
-
 		const table = dataTable( opts, ajax, columns );
 	//GENERARA LA TABLA DE RECARGAS
 
