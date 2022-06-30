@@ -99,8 +99,6 @@ const handleErrors = ( errors ) => {
 
 //Genera una DataTable()
 const dataTable = ( opt, ajax, columns ) => {
-	console.log( opt );
-
 	const table = $(`#${ opt.id }`).dataTable({
 		lengthMenu		: opt.lengths,
 		language		: opt.language,
