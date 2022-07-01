@@ -110,8 +110,7 @@ const dataTable = ( opt, ajax, columns ) => {
 		columns			: columns,
 		iDisplayLength	: opt.limit ,//Paginación
 		scrollY			: opt.scrollY,
-        scrollCollapse	: opt.scrollCollapse,
-		order: [[ 0, "asc" ]]
+        scrollCollapse	: opt.scrollCollapse
 	}).DataTable();
 
 	return table;
