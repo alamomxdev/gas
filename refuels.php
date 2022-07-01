@@ -163,13 +163,13 @@
 
                     <div class="row">
                         <div class="col col-3">
-                            <label class="form-label" for="region">Region de tarjeta</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase" id="region" disabled>
+                            <label class="form-label" for="region">Region de recarga</label>
+                            <select class="form-select form-select-sm" id="region"></select>
                         </div>
 
                         <div class="col col-3">
-                            <label class="form-label" for="subregion">Plaza de tarjeta</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase" id="subregion" disabled>
+                            <label class="form-label" for="subregion">Plaza de recarga</label>
+                            <select class="form-select form-select-sm" id="subregion"></select>
                         </div>
 
                         <div class="col col-3">
@@ -184,6 +184,28 @@
                     </div>
 
                     <hr>
+
+                    <div class="row">
+                        <div class="col col-3">
+                            <label class="form-label" for="region">Region de inicio</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="region_start" disabled>
+                        </div>
+
+                        <div class="col col-3">
+                            <label class="form-label" for="subregion">Plaza de inicio</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="subregion_start" disabled>
+                        </div>
+
+                        <div class="col col-3">
+                            <label class="form-label" for="region">Region de fin</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="region_end" disabled>
+                        </div>
+
+                        <div class="col col-3">
+                            <label class="form-label" for="subregion">Plaza de fin</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="subregion_end" disabled>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col col-3">
@@ -422,10 +444,8 @@
                     <table class="table table-striped table-sm" id="table-vehicle">
                         <thead class="small">
                             <tr>
-                                <th scope="col">Vehiculo</th>
                                 <th scope="col">Planeacion</th>
                                 <th scope="col">Contrato</th>
-                                <th scope="col">Movimiento</th>
                                 <th scope="col">Tipo</th>
                                 <th scope="col">Salida</th>
                                 <th scope="col">Retorno</th>
@@ -433,7 +453,9 @@
                                 <th scope="col">Fin</th>
                                 <th scope="col">Inicio real</th>
                                 <th scope="col">Fin real</th>
-                                <th scope="col"> &nbsp; </th>
+                                <th scope="col">Pre</th>
+                                <th scope="col">Faltante</th>
+                                <th scope="col">&nbsp;</th>
                             </tr>
                         </thead>
 
