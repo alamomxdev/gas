@@ -20,10 +20,12 @@ $(document).ready( () => {
 	const modal_cards = $('#modal-cards');
 	const modal_vehicles = $('#modal-vehicles');
 	const modal_img = $('#modal-img');
+	const modal_locations = $('#modal-locations');
 
   	modal.modal({backdrop: 'static', keyboard: false, show:true });
   	modal_cards.modal({backdrop: 'static', keyboard: false, show:true });
   	modal_vehicles.modal({backdrop: 'static', keyboard: false, show:true });
+  	modal_locations.modal({backdrop: 'static', keyboard: false, show:true });
 
 //TABLAS
 //############################################################
@@ -124,6 +126,41 @@ $(document).ready( () => {
 		const cards_table = dataTable( opts_g, ajax_g, columns_g );
 	//Tabla de tatjetas
 
+	//Tabla de oficinas
+		const opts_l = {
+			lengths 	: [ 10, 15 ],
+			language	: genObj.language,
+			buttons 	: genObj.buttons,
+			limit 		: 10,
+			id    		: 'table-locations',
+			scrollY		: '25vh',
+	        scrollCollapse	: true
+		};
+		const columns_l = [
+			{ data: 'reference' },
+			{ data: 'name' },
+			{ data: 'subregion' },
+			{ data: 'region' },
+			{ data: 'status', render: ( data, type, row ) => { 
+				return `<button class='btn btn-primary btn-sm' idlocation='${ row.idlocation }' location='${ row.name }'> 
+								<i class="fa-solid fa-arrow-pointer"></i> 
+						</button>`; 
+			} }
+		];
+		const ajax_l = {
+			url: `${apiObj.site}assets/locations.json`,
+			type : "GET",
+			dataSrc: "locations",
+			beforeSend: ( req ) => {
+				req.setRequestHeader('x-token', localStorage.getItem('x-token') );
+			},      
+			error: function( errors ){
+				handleErrors( errors );
+			}
+		}
+		const cards_locations = dataTable( opts_l, ajax_l, columns_l );
+	//Tabla de oficinas
+
 	//Tabla de historico de auto
 		const opts_v= {
 			lengths 	: [ 10, 15 ],
@@ -164,18 +201,11 @@ $(document).ready( () => {
 																			? ''
 																			: row.VehicleDriverHistoryNumber;  
 
-						const region_start = row.PickUpRegionSr;
-						const subregion_start = row.PickUpRegion;
-						const idregion_start = row.PickUpRegionSrId;
-						const idsubregion_start = row.PickUpRegionId;
+						const location_start = row.PickUpLocation;
+						const idlocation_start = row.PickUpLocationId;
 
-						const region_end = row.DropOffRegionSr;
-						const subregion_end = row.DropOffRegion;
-						const idregion_end = row.DropOffRegionSrId;
-						const idsubregion_end = row.DropOffRegionId;
-
-						const region = row.PickUpRegionSr;
-						const subregion = row.PickUpRegion;
+						const location_end = row.DropOffLocation;
+						const idlocation_end = row.DropOffLocationId;
 
 						const idrefuel_type = parseInt( $('#refuel_type').val()?$('#refuel_type').val():0 );
 						const idrefuel_subtype = parseInt( $('#refuel_type').val()?$('#refuel_subtype').val():0 );
@@ -233,24 +263,19 @@ $(document).ready( () => {
 																								? 0
 																								: button ;
 
-							button = ( idrefuel_subtype===12 && ( row.StartFuelLevel > row.EndFuelLevel ) && !fulltank )
+							button = ( idrefuel_subtype===12 && ( row.StartFuelLevel > row.EndFuelLevel ) && !fulltank && row.VehicleDriverHistoryNumber )
 																		? 1
 																		: ( idrefuel_subtype===12 )
 																								? 0
-																								: button;
-								
+																								: button;	
 						}
 
 						return ( button===1 ) ?`
 								<button class='btn btn-primary btn-sm' 
-									region_start='${ region_start }' 
-									subregion_start='${ subregion_start }' 
-									idregion_start='${ idregion_start }' 
-									idsubregion_start='${ idsubregion_start }'
-									region_end='${ region_start }' 
-									subregion_end='${ subregion_start }' 
-									idregion_end='${ idregion_start }' 
-									idsubregion_end='${ idsubregion_start }'
+									location_start='${ location_start }'
+									idlocation_start='${ idlocation_start }'
+									location_end='${ location_end }'
+									idlocation_end='${ idlocation_end }'
 									economic_number='${ row.VehicleNumber }' 
 									fm_planning='${ row.SequenceNumber }' 
 									fm_contract='${ fm_contract }'
@@ -362,44 +387,6 @@ $(document).ready( () => {
 		});
 	});
 
-	$('#region').on('change', function(){
-		const region = parseInt($(this).val());
-
-		const subregion_start = $('#subregion_start').val();
-		const idsubregion_start = parseInt( $('#subregion_start').attr('idsubregion_start') );
-		const subregion_end = $('#subregion_end').val();
-		const idsubregion_end = parseInt( $('#subregion_end').attr('idsubregion_end') );
-
-		let subregion_start_is = false;
-		let subregion_end_is = false;
-		
-		$('#subregion').html('<option value=""></option>');
-
-		$.each( subregions, ( i, e ) => {
-			if( e.idparent===region )
-				$('#subregion').append(`<option value='${ e.idregion }'>${ e.name }</option>`);
-
-			if( e.idregion===idsubregion_start )
-				subregion_start_is=true;
-
-			if( e.idregion===idsubregion_end )
-				subregion_end_is=true;
-		});
-
-		if( !subregion_start_is && region_start!=='' )
-			$('#region').append(`<option value='${ idsubregion_start }'>${ subregion_start }</option>`);
-
-		if( !subregion_end_is && region_start!=='' )
-			$('#region').append(`<option value='${ idsubregion_end }'>${ subregion_end }</option>`);
-	});
-
-	//Cambio de region de cost
-	$('#region_cost').on('change', function(){
-		const idparent = parseInt($(this).val());
-
-		fillSubRegionCost( idparent );
-	});
-
 	//Buscar Refuel
 	$('#btn-search').on('click', () => { 
 		const data = {
@@ -481,14 +468,10 @@ $(document).ready( () => {
 			fm_planning			: { value : $('#fm_planning').val() },
 			fm_contract			: { value : $('#fm_contract').val() },
 			idplanning_type		: { value : ( $('#planning_type').attr('idplanning_type') )?parseInt( $('#planning_type').attr('idplanning_type') ):'' },
-			idregion 			: { value : parseInt( $('#region').val() ), required : true },
-			idsubregion 		: { value : parseInt( $('#subregion').val() ), required : true },
-			idregion_start 		: { value : parseInt( $('#region_start').attr('idregion_start') ) },
-			idsubregion_start 	: { value : parseInt( $('#subregion_start').attr('idsubregion_start') ) },
-			idregion_end 		: { value : parseInt( $('#region_end').attr('idregion_end') ) },
-			idsubregion_end 	: { value : parseInt( $('#subregion_end').attr('idsubregion_end') ) },
-			idregion_cost 		: { value : parseInt( $('#region_cost').val() ), required : true },
-			idsubregion_cost	: { value : parseInt( $('#subregion_cost').val() ), required : true },
+			idlocation 			: { value : parseInt( $('#location').attr('idlocation') ), required : true },
+			idlocation_cost 	: { value : parseInt( $('#location_cost').attr('idlocation') ), required : true },
+			idlocation_start 	: { value : parseInt( $('#location_start').attr('idlocation_start') ) },
+			idlocation_end 		: { value : parseInt( $('#location_end').attr('idlocation_end') ) },
 			refuel_date 		: { value : $('#refuel_date').val(), required : true },
 			refuel_time 		: { value : $('#refuel_time').val(), required : true },
 			amount 				: { value : parseFloat( $('#amount').val() ), required : true },
@@ -544,7 +527,6 @@ $(document).ready( () => {
 			deleteForm();
 
 			fillSubtype( refuel.idrefuel_type );
-			fillSubRegionCost( refuel.idregion_cost );
 
 			$('#sp-uid').html( refuel.refuel_number );
 			$('#hi_idrefuel').val( refuel.idrefuel );
@@ -557,16 +539,16 @@ $(document).ready( () => {
 			$('#vehicle').val( refuel.economic_number );
 			$('#vehicle').attr( 'economic_number', refuel.economic_number );
 			$('#vehicle').attr( 'idvehicle', refuel.idvehicle );
-			$('#region_start').val( refuel.region_start );
-			$('#region_start').attr( 'idregion_start', refuel.idregion_start );
-			$('#subregion_start').val( refuel.subregion_start );
-			$('#subregion_start').attr( 'idsubregion_start', refuel.idsubregion_start );
-			$('#region_end').val( refuel.region_end );
-			$('#region_end').attr( 'idregion_end', refuel.idregion_end );
-			$('#subregion_end').val( refuel.subregion_end );
-			$('#subregion_end').attr( 'idsubregion_end', refuel.idsubregion_end );
-			$('#region_cost').val( refuel.idregion_cost );
-			$('#subregion_cost').val( refuel.idsubregion_cost );
+			
+			$('#location').val( refuel.location );
+			$('#location').attr( 'idlocation', refuel.idlocation );
+			$('#location_cost').val( refuel.location_cost );
+			$('#location_cost').attr( 'idlocation', refuel.idlocation_cost );
+			$('#location_start').val( refuel.location_start );
+			$('#location_start').attr( 'idlocation_start', refuel.idlocation_start );
+			$('#location_end').val( refuel.location_end );
+			$('#location_end').attr( 'idlocation_end', refuel.idlocation_end );
+			
 			$('#fm_planning').val( refuel.fm_planning );
 			$('#fm_contract').val( refuel.fm_contract );
 			$('#planning_type').val( refuel.planning_type );
@@ -687,7 +669,68 @@ $(document).ready( () => {
 	});
 //############################################################
 
-//MODAL DE TERJTAS
+//MODAL DE OFICINAS
+	$('#btn-location, #btn-location_cost').on('click', function(){
+		modal.modal('hide');
+
+		$('#location-search').val('');
+
+		const data = { search:$('#location-search').val() };
+
+		const u = objTOurl( data );
+
+		cards_locations.ajax.url(`${apiObj.host}/api/locations?${u}`).load();
+
+		$('#location_type').val( $(this).attr('id') );
+
+		modal_locations.modal('show');
+	});
+
+	$('#btn-search-location').on('click', () => {
+		const data = { search:$('#location-search').val() };
+
+		const u = objTOurl( data );
+
+		cards_locations.ajax.url(`${apiObj.host}/api/locations?${u}`).load();
+	});
+
+	$('#location-search').on('keypress', (e) => {
+		if( e.which===13 )
+			$('#btn-search-location').click();
+	});
+
+	$('#btn-location-close').on('click', () => {
+		modal.modal('show');
+
+		modal_locations.modal('hide');
+	});
+
+	$('#table-locations').on('click', '.btn', function(){
+		const idlocation = $(this).attr('idlocation');
+		const location = $(this).attr('location');
+		const type = $('#location_type').val();
+
+		const input = ( type==='btn-location' )?'location':'location_cost';
+
+		$(`#${ input }`).val( location );
+		$(`#${ input }`).attr('idlocation', idlocation );
+
+		modal_locations.modal('hide');
+		modal.modal('show');
+	});
+
+	$("#btn-erase-location").on('click', () => {
+		$('#location').val('');
+		$('#location').attr('idlocation', '');
+	});
+
+	$("#btn-erase-location_cost").on('click', () => {
+		$('#location_cost').val('');
+		$('#location_cost').attr('idlocation', '');
+	});
+//MODAL DE OFICINAS
+
+//MODAL DE TARJETAS
 //#####################################################################
 	//Mostrar modal para buscar tarjetas
 	$('#btn-card').on('click', () => {
@@ -878,15 +921,11 @@ $(document).ready( () => {
 		const fm_planning = $(this).attr('fm_planning');
 		const fm_contract = $(this).attr('fm_contract');
 
-		const region_start = $(this).attr('region_start');
-		const subregion_start = $(this).attr('subregion_start');
-		const idregion_start = $(this).attr('idregion_start');
-		const idsubregion_start = $(this).attr('idsubregion_start');
+		const location_start = $(this).attr('location_start');
+		const idlocation_start = $(this).attr('idlocation_start');
 
-		const region_end = $(this).attr('region_end');
-		const subregion_end = $(this).attr('subregion_end');
-		const idregion_end = $(this).attr('idregion_end');
-		const idsubregion_end = $(this).attr('idsubregion_end');
+		const location_end = $(this).attr('location_end');
+		const idlocation_end = $(this).attr('idlocation_end');
 
 		const planning_type = $(this).attr('planning_type');
 		const idplanning_type = $(this).attr('idplanning_type');
@@ -901,15 +940,11 @@ $(document).ready( () => {
 		$('#fm_planning').val( fm_planning );
 		$('#fm_contract').val( fm_contract );
 
-		$('#region_start').val(region_start);
-		$('#region_start').attr('idregion_start', idregion_start);
-		$('#subregion_start').val(subregion_start);
-		$('#subregion_start').attr('idsubregion_start', idsubregion_start);
+		$('#location_start').val( location_start );
+		$('#location_start').attr('idlocation_start', idlocation_start);
 
-		$('#region_end').val(region_end);
-		$('#region_end').attr('idregion_end', idregion_end);
-		$('#subregion_end').val(subregion_end);
-		$('#subregion_end').attr('idsubregion_end', idsubregion_end);
+		$('#location_end').val( location_end );
+		$('#location_end').attr('idlocation_end', idlocation_end);
 
 		$('#region, #subregion').html('<option value=""></option>');
 		fillRefuelRegions();
@@ -944,15 +979,11 @@ $(document).ready( () => {
 		$('#vehicle').attr('idvehicle', '');
 		$('#vehicle').attr('economic_number', '');
 
-		$('#region').attr('idregion', '');
-		$('#subregion').attr('idsubregion', '');
-
-		$('#region_start').attr('idregion_start', '');
-		$('#subregion_start').attr('idsubregion_start', '');
-
-		$('#region_end').attr('idregion_end', '');
-		$('#subregion_end').attr('idsubregion_end', '');
-
+		$('#location').attr('idlocation', '');
+		$('#location_cost').attr('idlocation', '');
+		$('#location_start').attr('idlocation_start', '');
+		$('#location_end').attr('idlocation_end', '');
+	
 		$('#comments').val('');
 
 		$('#refuel_attached').addClass('d-none');
@@ -961,8 +992,6 @@ $(document).ready( () => {
 		$('#btn-view-img').prop('disabled', false);
 
 		$('#lb_img').html('Seleccione un archivo');
-
-		$('#region, #subregion').html('<option value=""></option>');
 	}
 
 	const FMDate = ( data ) =>{
@@ -995,15 +1024,6 @@ $(document).ready( () => {
 		refuel_subtypes.forEach( ( e, i, a ) => {
 			if( e.idparent===idparent )
 				$('#refuel_subtype').append(`<option value='${ e.idrefuel_type }'>${ e.name }</option>`);
-		});
-	}
-
-	const fillSubRegionCost = ( idparent ) => {
-		$('#subregion_cost').html(`<option value=''></option>`);
-
-		subregions.forEach( (e, i, a) => {
-			if( idparent===e.idparent )
-				$('#subregion_cost').append(`<option value='${ e.idregion }'>${ e.name }</option>`);
 		});
 	}
 

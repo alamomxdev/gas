@@ -162,48 +162,44 @@
                     <hr>
 
                     <div class="row">
-                        <div class="col col-3">
-                            <label class="form-label" for="region">Region de recarga</label>
-                            <select class="form-select form-select-sm" id="region"></select>
+                        <div class="col col-6">
+                            <label class="form-label" for="location">Oficina de carga <span class="small text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm text-uppercase" id="location" disabled>
+                                <button class="btn btn-sm btn-secondary" id="btn-location">
+                                    <i class="fa-solid fa-filter"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" id="btn-erase-location">
+                                    <i class="fa-solid fa-eraser"></i>
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="col col-3">
-                            <label class="form-label" for="subregion">Plaza de recarga</label>
-                            <select class="form-select form-select-sm" id="subregion"></select>
-                        </div>
-
-                        <div class="col col-3">
-                            <label class="form-label" for="region_cost">Region de <b>costo</b> <span class="small text-danger">*</span></label>
-                            <select class="form-select form-select-sm" id="region_cost"></select>
-                        </div>
-
-                        <div class="col col-3">
-                            <label class="form-label" for="subregion_cost">Plaza de <b>costo</b> <span class="small text-danger">*</span></label>
-                            <select class="form-select form-select-sm" id="subregion_cost"></select>
+                        <div class="col col-6">
+                            <label class="form-label" for="location_cost">Oficina de <b>costo</b> <span class="small text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm text-uppercase" id="location_cost" disabled>
+                                <button class="btn btn-sm btn-secondary" id="btn-location_cost">
+                                    <i class="fa-solid fa-filter"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" id="btn-erase-location_cost">
+                                    <i class="fa-solid fa-eraser"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <hr>
 
                     <div class="row">
-                        <div class="col col-3">
-                            <label class="form-label" for="region">Region de inicio</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase" id="region_start" disabled>
+                        <div class="col col-6">
+                            <label class="form-label" for="location_start">Oficina de salid</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="location_start" disabled>
                         </div>
 
-                        <div class="col col-3">
-                            <label class="form-label" for="subregion">Plaza de inicio</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase" id="subregion_start" disabled>
-                        </div>
-
-                        <div class="col col-3">
-                            <label class="form-label" for="region">Region de fin</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase" id="region_end" disabled>
-                        </div>
-
-                        <div class="col col-3">
-                            <label class="form-label" for="subregion">Plaza de fin</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase" id="subregion_end" disabled>
+                        <div class="col col-6">
+                            <label class="form-label" for="location_end">Oficina de retorno</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="location_end" disabled>
                         </div>
                     </div>
 
@@ -361,7 +357,6 @@
 
 <!-- Modal Vehiculos -->
 <div class="modal" id="modal-vehicles">
-        
     <div class="modal-dialog modal-dialog-centered modal-xl">
         
         <div class="modal-content" style="max-height: 800px; min-height: 800px;">
@@ -476,13 +471,69 @@
         </div>
 
     </div>
-
 </div>
 <!-- Modal Vehiculos -->
 
+<!-- Modal para busqueda de tarjetas -->
+<div class="modal" id="modal-locations">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+
+        <input type="hidden" id="location_type">
+        
+        <div class="modal-content" style="max-height: 500px; min-height: 500px;">
+            <div class="modal-header">
+                <span class="fs-6">Busqueda de oficinas</span>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-auto">
+                        <label for="location-search">Oficina</label>
+                    </div>
+
+                    <div class="col-auto">
+                        <input type="text" class="form-control form-control-sm text-uppercase" id="location-search">
+                    </div>
+
+                    <div class="col-auto">
+                        <button class="btn btn-sm btn-primary" id="btn-search-location">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm" id="table-locations">
+                        <thead class="small">
+                            <tr>
+                                <th scope="col"> - </th>
+                                <th scope="col">Oficina</th>
+                                <th scope="col">Plaza</th>
+                                <th scope="col">Region</th>
+                                <th scope="col"> &nbsp; </th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="small"> </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" id="btn-location-close">
+                    <i class="fa-solid fa-xmark"></i>
+                    Cerrar
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Modal para busqueda de tarjetas -->
+
 <!-- Modal img -->
 <div class="modal" id="modal-img">
-    
     <div class="modal-dialog modal-dialog-centered">
         
         <div class="modal-content">
@@ -496,6 +547,5 @@
         </div>
 
     </div>
-
 </div>
 <!-- Modal img -->
