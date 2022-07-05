@@ -257,17 +257,24 @@ $(document).ready( () => {
 								});
 							}
 
-							button = ( idrefuel_subtype===11 && fulltank ) 
-																		? 1 
-																		: ( idrefuel_subtype===11 )
-																								? 0
-																								: button ;
+							if( idrefuel_subtype===11 && row.VehicleDriverHistoryNumber ) {
+								button = ( fulltank )
+													? 1 
+													: button ;
+							}
+																		
 
-							button = ( idrefuel_subtype===12 && ( row.StartFuelLevel > row.EndFuelLevel ) && !fulltank && row.VehicleDriverHistoryNumber )
+							if( idrefuel_subtype===12 && row.VehicleDriverHistoryNumber ){
+								button = ( row.StartFuelLevel > row.EndFuelLevel && !fulltank  )
 																		? 1
-																		: ( idrefuel_subtype===12 )
-																								? 0
-																								: button;	
+																		: button;
+							}
+
+							console.log( idrefuel_subtype );
+							console.log( onid );
+							console.log( onparent );
+							console.log( row.PlanningType, row.TypeId )
+									
 						}
 
 						return ( button===1 ) ?`
