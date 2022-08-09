@@ -11,7 +11,7 @@
         </div>
 
         <div class="col-auto">
-            <input type="text" id="input-search" size="10" class="form-control form-control-sm text-uppercase" aria-describedby="">
+            <input type="text" id="input-search" size="5" class="form-control form-control-sm text-uppercase" aria-describedby="">
         </div>
 
         <div class="col-auto">
@@ -23,17 +23,21 @@
         </div>
 
         <div class="col-auto">
+            <select id="filter_location" class="form-select form-select-sm" style="min-width: 100px; max-width: 100px;"></select>
+        </div>
+
+        <div class="col-auto">
             <label for="filter-f1" class="col-form-label">F. Inicial</label>
         </div>
         <div class="col-auto">
-            <input type="date" id="filter-f1" class="form-control form-control-sm">
+            <input type="date" id="filter-f1" class="form-control form-control-sm" style="min-width: 100px; max-width: 100px;">
         </div>
 
         <div class="col-auto">
             <label for="filter-f2" class="col-form-label">F. Fin</label>
         </div>
         <div class="col-auto">
-            <input type="date" id="filter-f2" class="form-control form-control-sm" >
+            <input type="date" id="filter-f2" class="form-control form-control-sm" style="min-width: 100px; max-width: 100px;">
         </div>
 
         <div class="col-auto">
@@ -215,8 +219,13 @@
                         </div>
 
                         <div class="col col-3">
-                            <label class="form-label" for="planning_type">Tipo</label>
+                            <label class="form-label" for="planning_type">Tipo de planeacion</label>
                             <input type="text" class="form-control form-control-sm text-uppercase" id="planning_type" disabled>
+                        </div>
+
+                        <div class="col col-3">
+                            <label class="form-label" for="odometer">Kilometraje</label>
+                            <input type="number" class="form-control form-control-sm" id="odometer">
                         </div>
                     </div>
 
@@ -244,6 +253,26 @@
                         <div class="col col-2">
                             <label class="form-label">$/L</label>
                             <input type="text" class="form-control form-control-sm text-uppercase" id="amount_per_liter" disabled>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3">
+                            <label class="form-label">Combustible <span class="small text-danger">*</span></label>
+                            <select class="form-select form-select-sm" id="fuel_type"></select>
+                        </div>
+
+                        <div class="col-5">
+                            <label class="form-label" for="card">Colaborador que cargo <span class="small text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm text-uppercase" id="staff" disabled>
+                                <button class="btn btn-sm btn-secondary" id="btn-staff">
+                                    <i class="fa-solid fa-filter"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" id="btn-erase-staff">
+                                    <i class="fa-solid fa-eraser"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -448,6 +477,7 @@
                                 <th scope="col">Fin</th>
                                 <th scope="col">Inicio real</th>
                                 <th scope="col">Fin real</th>
+                                <th scope="col"><i class="fa-solid fa-right-left"></i></th>
                                 <th scope="col">Pre</th>
                                 <th scope="col">Faltante</th>
                                 <th scope="col">&nbsp;</th>
@@ -531,6 +561,63 @@
     </div>
 </div>
 <!-- Modal para busqueda de tarjetas -->
+
+<!-- Modal para busqueda de STAFF -->
+<div class="modal" id="modal-staff">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        
+        <input type="hidden" id="staff_member">
+
+        <div class="modal-content" style="max-height: 500px; min-height: 500px;">
+            <div class="modal-header">
+                <span class="fs-6">Busqueda de colaboradores</span>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-auto">
+                        <label for="staff-search">Nombre</label>
+                    </div>
+
+                    <div class="col-auto">
+                        <input type="text" class="form-control form-control-sm text-uppercase" id="staff-search">
+                    </div>
+
+                    <div class="col-auto">
+                        <button class="btn btn-sm btn-primary" id="btn-search-staff">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm" id="table-staff">
+                        <thead class="small">
+                            <tr>
+                                <th scope="col"> - </th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Puesto</th>
+                                <th scope="col"> &nbsp; </th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="small"> </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" id="btn-staff-close">
+                    <i class="fa-solid fa-xmark"></i>
+                    Cerrar
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Modal para busqueda de STAFF -->
 
 <!-- Modal img -->
 <div class="modal" id="modal-img">

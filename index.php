@@ -163,6 +163,8 @@
     <div class="container">
         <div class="card card-container" id="card_login">
                 
+            <img src="./assets/logo_alamo.png" class="card-img-top" style="width:165px; margin:auto; margin-bottom:30px;">
+
             <h5 class='card-title'><span style="color:grey;">Gas</span> <span style="color:skyblue;">Control</span></h5>
            
             <form class="form-signin">
