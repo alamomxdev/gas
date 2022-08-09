@@ -581,11 +581,11 @@ $(document).ready( () => {
 			toastr.warning('Es necesario seleccionar un vehiculo para la carga');
 		}
 
-		/*if( (form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 21) && !form.odometer.value ){
+		if( (form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 21) && !form.odometer.value ){
 			pass = false;
 
 			toastr.warning('Es necesario ingresar el kilometraje de la unidad');
-		}*/
+		}
 
 		if( pass ){
 			const entries = new Map( pass_data );
