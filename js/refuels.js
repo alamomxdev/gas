@@ -566,24 +566,26 @@ $(document).ready( () => {
 
 		let { pass, pass_data } = formInputsValidate(form);
 
+		console.log( form );
+
 		//SI es auto nuevo no necesita planeacion
-		if( (form.idrefuel_subtype.value !== 15 && form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 20) && !form.fm_planning.value  ){
+		if( (form.idrefuel_subtype.value !== 15 && form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 21) && !form.fm_planning.value  ){
 			pass = false;
 
 			toastr.warning('Es requerido una planeacion para seguir con la carga');
 		}
 
-		if( (form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 20) && !form.idvehicle.value ){
+		if( (form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 21) && !form.idvehicle.value ){
 			pass = false;
 
 			toastr.warning('Es necesario seleccionar un vehiculo para la carga');
 		}
 
-		if( (form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 20) && !form.odometer.value ){
+		/*if( (form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 21) && !form.odometer.value ){
 			pass = false;
 
 			toastr.warning('Es necesario ingresar el kilometraje de la unidad');
-		}
+		}*/
 
 		if( pass ){
 			const entries = new Map( pass_data );
@@ -1222,15 +1224,11 @@ $(document).ready( () => {
 		$('#planning_type').val( '' );
 		$('#planning_type').attr('idplanning_type', '');
 
-		$('#region_start').val('');
-		$('#region_start').attr('idregion_start', '');
-		$('#subregion_start').val('');
-		$('#subregion_start').attr('idsubregion_start', '');
+		$('#location_start').val('');
+		$('#location_start').attr('idlocation_start', '');
 
-		$('#region_end').val('');
-		$('#region_end').attr('idregion_end', '');
-		$('#subregion_end').val('');
-		$('#subregion_end').attr('idsubregion_end', '');
+		$('#location_end').val('');
+		$('#location_end').attr('idlocation_end', '');
 	}
 
 	const fillRefuelRegions = ( idregion, idsubregion ) => {
