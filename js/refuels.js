@@ -3,6 +3,7 @@ $(document).ready( () => {
 
 	let regions = [];
 	let subregions = [];
+	let locations = [];
 	const suppliers = [];
 
 	let refuel_types = [];
@@ -20,10 +21,14 @@ $(document).ready( () => {
 	const modal_cards = $('#modal-cards');
 	const modal_vehicles = $('#modal-vehicles');
 	const modal_img = $('#modal-img');
+	const modal_locations = $('#modal-locations');
+	const modal_staff = $('#modal-staff')
 
   	modal.modal({backdrop: 'static', keyboard: false, show:true });
   	modal_cards.modal({backdrop: 'static', keyboard: false, show:true });
   	modal_vehicles.modal({backdrop: 'static', keyboard: false, show:true });
+  	modal_locations.modal({backdrop: 'static', keyboard: false, show:true });
+  	modal_staff.modal({backdrop: 'static', keyboard: false, show:true });
 
 //TABLAS
 //############################################################
@@ -31,6 +36,7 @@ $(document).ready( () => {
 		const opts = {
 			lengths : [ 20, 30, 50, 75, 100 ],
 			language: genObj.language,
+			dom: '<Bl<f>rtip>',
 			buttons : genObj.buttons,
 			limit : 20,
 			id    : 'table-refuels'
@@ -41,7 +47,12 @@ $(document).ready( () => {
 			{ data: 'supplier' },
 			{ data: 'refuel_type' },
 			{ data: 'economic_number' },
-			{ data: 'fm_planning' },
+			{ 
+				data: 'fm_planning',
+				render : ( data, type, row ) => {
+					return ` ${ (data)?data:'' }${ ( row.fm_contract )?` / ${row.fm_contract}`:'' } `;
+				} 
+			},
 			{ data: 'subregion' },
 			{ data: 'refuel_datetime' },
 			{ data: 'refuel_createdat' },
@@ -51,9 +62,13 @@ $(document).ready( () => {
 			{ 
 				data: 'idrefuel', 
 				render: ( data, type, row ) => { 
+					
+
 					const btn_open = `<button class='btn btn-primary btn-sm' idrefuel='${ data }'> <i class="fa-solid fa-pencil"></i> </button>`;
 
-					const btn_img = ( row.img )?`<button class='btn btn-success btn-sm' img='${ row.img }'> <i class="fa-solid fa-image"></i> </button>`:'';
+					const ext = ( row.img )?row.img.split('.'):[];
+
+					const btn_img = ( row.img )?`<button class='btn btn-success btn-sm' img='${ row.img }'> <i class="fa-solid ${ ext[1]==='pdf'?'fa-file-pdf':'fa-image' } "></i> </button>`:'';
 
 					return `${ btn_open } ${ btn_img }`; 
 				} 
@@ -113,6 +128,75 @@ $(document).ready( () => {
 		}
 		const cards_table = dataTable( opts_g, ajax_g, columns_g );
 	//Tabla de tatjetas
+		const opts_s = {
+			lengths 	: [ 10, 15 ],
+			language	: genObj.language,
+			buttons 	: genObj.buttons,
+			limit 		: 10,
+			id    		: 'table-staff',
+			scrollY		: '25vh',
+	        scrollCollapse	: true
+		};
+		const columns_s = [
+			{ data: 'idstaff' },
+			{ data: 'name' },
+			{ data: 'staff_type' },
+			{ data: 'status', render: ( data, type, row ) => { 
+				return `<button class='btn btn-primary btn-sm' idstaff='${ row.idstaff }' name='${ row.name }'> 
+								<i class="fa-solid fa-arrow-pointer"></i> 
+						</button>`; 
+			} }
+		];
+		const ajax_s = {
+			url: `${apiObj.site}assets/staff.json`,
+			type : "GET",
+			dataSrc: "staff",
+			beforeSend: ( req ) => {
+				req.setRequestHeader('x-token', localStorage.getItem('x-token') );
+			},      
+			error: function( errors ){
+				handleErrors( errors );
+			}
+		}
+		const staff_table = dataTable( opts_s, ajax_s, columns_s );
+	//Tabla de Staff
+
+	//Tabla de Staff
+
+	//Tabla de oficinas
+		const opts_l = {
+			lengths 	: [ 10, 15 ],
+			language	: genObj.language,
+			buttons 	: genObj.buttons,
+			limit 		: 10,
+			id    		: 'table-locations',
+			scrollY		: '25vh',
+	        scrollCollapse	: true
+		};
+		const columns_l = [
+			{ data: 'reference' },
+			{ data: 'name' },
+			{ data: 'subregion' },
+			{ data: 'region' },
+			{ data: 'status', render: ( data, type, row ) => { 
+				return `<button class='btn btn-primary btn-sm' idlocation='${ row.idlocation }' location='${ row.name }'> 
+								<i class="fa-solid fa-arrow-pointer"></i> 
+						</button>`; 
+			} }
+		];
+		const ajax_l = {
+			url: `${apiObj.site}assets/locations.json`,
+			type : "GET",
+			dataSrc: "locations",
+			beforeSend: ( req ) => {
+				req.setRequestHeader('x-token', localStorage.getItem('x-token') );
+			},      
+			error: function( errors ){
+				handleErrors( errors );
+			}
+		}
+		const cards_locations = dataTable( opts_l, ajax_l, columns_l );
+	//Tabla de oficinas
 
 	//Tabla de historico de auto
 		const opts_v= {
@@ -126,17 +210,28 @@ $(document).ready( () => {
 		};
 
 		const columns_v = [
-			{ data: 'VehicleNumber' },
 			{ data: 'SequenceNumber' },
 			{ data: 'VehicleDriverHistoryNumber' },
-			{ data: 'TipoEstatus' },
 			{ data: 'Type' },
 			{ data: 'PickUpLocation' },
 			{ data: 'DropOffLocation' },
-			{ data: 'StartTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
-			{ data: 'EndTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
-			{ data: 'ActualStartTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
-			{ data: 'ActualEndTime', render:( data, type, row ) =>{ return FMDateRes( data ); } },
+			{ data: 'StartTime', render:( data, type, row ) =>{ return FMDate( data ); } },
+			{ data: 'EndTime', render:( data, type, row ) =>{ return FMDate( data ); } },
+			{ data: 'ActualStartTime', render:( data, type, row ) =>{ return FMDate( data ); } },
+			{ data: 'ActualEndTime', render:( data, type, row ) =>{ return FMDate( data ); } },
+			{ data: 'VeicleChanged', render:( data, type, row ) =>{ return ( data )?'Si':'No' } },
+			{ data: 'fullTankPrepayment', render:( data, type, row ) =>{ 
+				const prepay = ( ( data==='true' )?'Si':'' )
+
+				return prepay; 
+			} },
+			{ data: 'ActualEndTime', render:( data, type, row ) =>{ 
+				const { StartFuelLevel, EndFuelLevel, FuelCapacity } = row;
+
+				const liters =( StartFuelLevel > EndFuelLevel ) ? (((StartFuelLevel-EndFuelLevel)/100)*FuelCapacity)+' lts' : '';
+
+				return liters;
+			} },
 			{ 
 				data: 'InvoicingStatus', 
 				render: ( data, type, row ) => { 
@@ -144,11 +239,11 @@ $(document).ready( () => {
 																			? ''
 																			: row.VehicleDriverHistoryNumber;  
 
-						const idregion = row.PickUpRegionSrId;
-						const idsubregion = row.PickUpRegionId;
+						const location_start = row.PickUpLocation;
+						const idlocation_start = row.PickUpLocationId;
 
-						const region = row.PickUpRegionSr;
-						const subregion = row.PickUpRegion;
+						const location_end = row.DropOffLocation;
+						const idlocation_end = row.DropOffLocationId;
 
 						const idrefuel_type = parseInt( $('#refuel_type').val()?$('#refuel_type').val():0 );
 						const idrefuel_subtype = parseInt( $('#refuel_type').val()?$('#refuel_subtype').val():0 );
@@ -171,8 +266,9 @@ $(document).ready( () => {
 								if( e.idrefuel_type===idrefuel_type )
 									onparent.push( e );
 							});
-				
 
+							const fulltank = ( row.fullTankPrepayment==='true' )?true:false;
+				
 							if( onid.length > 0 ){
 								onid.forEach( ( element, index, array ) => {
 									if( element.idplanning_type === parseInt(row.PlanningType) ){
@@ -198,19 +294,45 @@ $(document).ready( () => {
 									}
 								});
 							}
+
+							//Prvendida
+							if( idrefuel_subtype===11 && row.VehicleDriverHistoryNumber ) {
+								button = ( fulltank )
+													? 1 
+													: button ;
+							}
+																		
+
+							//Faltante
+							if( idrefuel_subtype===12 && row.VehicleDriverHistoryNumber ){
+								button = ( row.StartFuelLevel > row.EndFuelLevel && !fulltank  )
+																		? 1
+																		: button;
+							}
+
+							//Cuando es un cambio de unidad
+							if( idrefuel_subtype==18 && row.VeicleChanged )
+								button = 1;
+
+							/*console.log( idrefuel_subtype );
+							console.log( onid );
+							console.log( onparent );
+							console.log( row.PlanningType, row.TypeId )*/
+									
 						}
 
-						return ( button ) ?`
+						return ( button===1 ) ?`
 								<button class='btn btn-primary btn-sm' 
-									region='${ region }' 
-									subregion='${ subregion }' 
-									idregion='${ idregion }' 
-									idsubregion='${ idsubregion }' 
+									location_start='${ location_start }'
+									idlocation_start='${ idlocation_start }'
+									location_end='${ location_end }'
+									idlocation_end='${ idlocation_end }'
 									economic_number='${ row.VehicleNumber }' 
 									fm_planning='${ row.SequenceNumber }' 
 									fm_contract='${ fm_contract }'
 									idplanning_type='${ row.PlanningType }'
-									planning_type='${ row.Type }'>
+									planning_type='${ row.Type }'
+									odometer='${ row.EndOdometer }'>
 									<i class='fa-solid fa-arrow-pointer'></i> 
 								</button>`:''; 
 				}
@@ -241,6 +363,8 @@ $(document).ready( () => {
   	request_regions.then( response => {
   		regions = response.regions;
   		subregions = response.subregions;
+  		locations = response.locations;
+
 
   		$('#filter_region').append('<option value="">Region</option>');
   		$('#region_cost').append('<option value=""></option>');
@@ -297,10 +421,23 @@ $(document).ready( () => {
 		refuel_plannings.planning_types = response.planning_types;
 		refuel_plannings.refuel_types = response.refuel_types;
 		refuel_plannings.refuel_plannings = response.refuel_plannings;
-
 	}, errors => {
 		handleErrors( errors );
 	});
+
+	//Obtener tipos de combutible
+	const req_fueltypes = ajaxRequest( ajaxSettingGen(`${apiObj.host}/api/fueltypes`, 'GET', headers_gen) );
+	req_fueltypes.then( res => {
+		const { fuelTypes } = res;
+
+		$('#fuel_type').html('<option value=""></option>')
+
+		fuelTypes.forEach( ( fuel, i ) => {
+			$('#fuel_type').append(`<option value='${ fuel.idfuel_type }'>${ fuel.name }</option>`);
+		});
+	}, errors => {
+		handleErrors( errors );
+	})
 //############################################################
 
 //Modal de Refuel
@@ -310,6 +447,7 @@ $(document).ready( () => {
 		const region = parseInt($(this).val());
 		
 		$('#filter_subregion').html('<option value="">Plaza</option>');
+		$('#filter_location').html('<option value="">Oficina</option>');
 
 		$.each( subregions, ( i, e ) => {
 			if( e.idparent===region )
@@ -317,11 +455,16 @@ $(document).ready( () => {
 		});
 	});
 
-	//Cambio de region de cost
-	$('#region_cost').on('change', function(){
-		const idparent = parseInt($(this).val());
+	//Cambio de plaza
+	$('#filter_subregion').on('change', function(){
+		const subregion = parseInt( $(this).val() );
 
-		fillSubRegionCost( idparent );
+		$('#filter_location').html('<option value="">Oficina</option>');
+
+		locations.forEach( ( location, index ) => {
+			if( subregion === location.idregion )
+				$('#filter_location').append(`<option value='${ location.idlocation }'>${ location.name }</option>`);
+		});
 	});
 
 	//Buscar Refuel
@@ -331,12 +474,34 @@ $(document).ready( () => {
 			idregion 		: ( $('#filter_region').val() )?parseInt( $('#filter_region').val() ):'',
 			idsubregion 	: ( $('#filter_subregion').val() )?parseInt( $('#filter_subregion').val() ):'',
 			f1 				: $('#filter-f1').val(),
-			f2 				: $('#filter-f2').val()
+			f2 				: $('#filter-f2').val(),
+			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : ''
 		}
 
 		const u = objTOurl( data );
 
 		table.ajax.url(`${ url }?${ u }`).load(); 
+	});
+
+	$('#btn-excel').on('click', () => {
+		const data = {
+			refuel_number 	: $('#input-search').val(),
+			idregion 		: ( $('#filter_region').val() )?parseInt( $('#filter_region').val() ):'',
+			idsubregion 	: ( $('#filter_subregion').val() )?parseInt( $('#filter_subregion').val() ):'',
+			f1 				: $('#filter-f1').val(),
+			f2 				: $('#filter-f2').val(),
+			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : ''
+		}
+
+		const u = objTOurl( data );
+
+		const request = ajaxRequest( ajaxSettingGen(`${url}/excel?${ u }`, 'GET', headers_gen) );
+
+		request.then( res => {
+			toastr.success(`Archivo enviado a su cuenta de correo <i class="fa-solid fa-envelope-circle-check"></i>`);
+		}, errors => {
+			handleErrors(errors);
+		} )
 	});
 
 	//Calculo de litros
@@ -376,33 +541,48 @@ $(document).ready( () => {
 		const uid = $('#hi_idrefuel').val();
 
 		const form = {
-			idsupplier		: { value : parseInt( $('#supplier').val() ), required : true },
-			idcard			: { value : parseInt( $('#card').attr('idcard') ), required : true },
-			refuel_number 	: { value : $('#refuel').val(), required : true },
-			idrefuel_type	: { value : parseInt( $('#refuel_type').val() ), required : true },
-			idrefuel_subtype: { value : parseInt( $('#refuel_subtype').val() ), required : true },
-			idvehicle		: { value : parseInt( $('#vehicle').attr('idvehicle') ) },
-			fm_planning		: { value : $('#fm_planning').val() },
-			fm_contract		: { value : $('#fm_contract').val() },
-			idplanning_type	: { value : ( $('#planning_type').attr('idplanning_type') )?parseInt( $('#planning_type').attr('idplanning_type') ):'' },
-			idregion 		: { value : parseInt( $('#region').attr('idregion') ) },
-			idsubregion 	: { value : parseInt( $('#subregion').attr('idsubregion') ) },
-			idregion_cost 	: { value : parseInt( $('#region_cost').val() ), required : true },
-			idsubregion_cost: { value : parseInt( $('#subregion_cost').val() ), required : true },
-			refuel_date 	: { value : $('#refuel_date').val(), required : true },
-			refuel_time 	: { value : $('#refuel_time').val(), required : true },
-			amount 			: { value : parseFloat( $('#amount').val() ), required : true },
-			liters 			: { value : parseFloat( $('#liters').val() ), required : true },
-			comments 		: { value : $('#comments').val() }
+			idsupplier			: { value : parseInt( $('#supplier').val() ), required : true },
+			idcard				: { value : parseInt( $('#card').attr('idcard') ), required : true },
+			refuel_number 		: { value : $('#refuel').val(), required : true },
+			idrefuel_type		: { value : parseInt( $('#refuel_type').val() ), required : true },
+			idrefuel_subtype	: { value : parseInt( $('#refuel_subtype').val() ), required : true },
+			idvehicle			: { value : parseInt( $('#vehicle').attr('idvehicle') ) },
+			fm_planning			: { value : $('#fm_planning').val() },
+			fm_contract			: { value : $('#fm_contract').val() },
+			idplanning_type		: { value : ( $('#planning_type').attr('idplanning_type') )?parseInt( $('#planning_type').attr('idplanning_type') ):'' },
+			idlocation 			: { value : parseInt( $('#location').attr('idlocation') ), required : true },
+			idlocation_cost 	: { value : parseInt( $('#location_cost').attr('idlocation') ), required : true },
+			idlocation_start 	: { value : parseInt( $('#location_start').attr('idlocation_start') ) },
+			idlocation_end 		: { value : parseInt( $('#location_end').attr('idlocation_end') ) },
+			refuel_date 		: { value : $('#refuel_date').val(), required : true },
+			refuel_time 		: { value : $('#refuel_time').val(), required : true },
+			amount 				: { value : parseFloat( $('#amount').val() ), required : true },
+			liters 				: { value : parseFloat( $('#liters').val() ), required : true },
+			comments 			: { value : $('#comments').val() },
+			odometer			: { value : parseInt( $('#odometer').val() ) },
+			idstaff				: { value : parseInt( $('#staff').attr('idstaff') ), required : true },
+			idfuel_type 		: { value : parseInt( $('#fuel_type').val() ), required : true }
 		}
 
 		let { pass, pass_data } = formInputsValidate(form);
 
 		//SI es auto nuevo no necesita planeacion
-		if( form.idrefuel_subtype.value !== 15 && !form.fm_planning.value  ){
+		if( (form.idrefuel_subtype.value !== 15 && form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 20) && !form.fm_planning.value  ){
 			pass = false;
 
-			toastr.warning('Es requerido un auto para seguir con la carga');
+			toastr.warning('Es requerido una planeacion para seguir con la carga');
+		}
+
+		if( (form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 20) && !form.idvehicle.value ){
+			pass = false;
+
+			toastr.warning('Es necesario seleccionar un vehiculo para la carga');
+		}
+
+		if( (form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 20) && !form.odometer.value ){
+			pass = false;
+
+			toastr.warning('Es necesario ingresar el kilometraje de la unidad');
 		}
 
 		if( pass ){
@@ -444,7 +624,6 @@ $(document).ready( () => {
 			deleteForm();
 
 			fillSubtype( refuel.idrefuel_type );
-			fillSubRegionCost( refuel.idregion_cost );
 
 			$('#sp-uid').html( refuel.refuel_number );
 			$('#hi_idrefuel').val( refuel.idrefuel );
@@ -457,12 +636,18 @@ $(document).ready( () => {
 			$('#vehicle').val( refuel.economic_number );
 			$('#vehicle').attr( 'economic_number', refuel.economic_number );
 			$('#vehicle').attr( 'idvehicle', refuel.idvehicle );
-			$('#region').val( refuel.region );
-			$('#region').attr( 'idregion', refuel.idregion );
-			$('#subregion').val( refuel.subregion );
-			$('#subregion').attr( 'idsubregion', refuel.idsubregion );
-			$('#region_cost').val( refuel.idregion_cost );
-			$('#subregion_cost').val( refuel.idsubregion_cost );
+			
+			$('#location').val( refuel.location );
+			$('#location').attr( 'idlocation', refuel.idlocation );
+			$('#location_cost').val( refuel.location_cost );
+			$('#location_cost').attr( 'idlocation', refuel.idlocation_cost );
+			$('#location_start').val( refuel.location_start );
+			$('#location_start').attr( 'idlocation_start', refuel.idlocation_start );
+			$('#location_end').val( refuel.location_end );
+			$('#location_end').attr( 'idlocation_end', refuel.idlocation_end );
+
+			$('#odometer').val( refuel.odometer );
+			
 			$('#fm_planning').val( refuel.fm_planning );
 			$('#fm_contract').val( refuel.fm_contract );
 			$('#planning_type').val( refuel.planning_type );
@@ -471,12 +656,29 @@ $(document).ready( () => {
 			$('#refuel_time').val( refuel.refuel_time );
 			$('#amount').val( refuel.amount );
 			$('#liters').val( refuel.liters );
+
+			$('#fuel_type').val( refuel.idfuel_type );
+
+			$('#staff').val( refuel.staff );
+			$('#staff').attr('idstaff', refuel.idstaff);
+
 			$('#comments').val( refuel.comments );
+
+			fillRefuelRegions( refuel.idregion, refuel.idsubregion );
 
 			$('#btn-view-img').attr('img', refuel.img );
 
-			if( !refuel.img )
+			if( !refuel.img ){
 				$('#btn-view-img').prop('disabled', true);
+				$('#btn-view-img').html(`<i class="fa-solid fa-image"></i>`);
+			}
+			else{
+				const ext = refuel.img.split('.');
+
+				$('#lb_img').html( refuel.img );
+
+				$('#btn-view-img').html(`<i class="fa-solid ${ (ext[1]==='pdf')?'fa-file-pdf':'fa-image' } "></i>`);
+			}
 
 			$('#refuel_attached').removeClass('d-none');
 
@@ -488,16 +690,6 @@ $(document).ready( () => {
 		})
 	});
 
-	//Ver una imagen previa
-	$('#table-refuels').on('click', '.btn-success', function(){
-		const img = $(this).attr('img');
-
-		$('#modal-img img').prop('src', '');
-		
-		$('#modal-img img').prop('src', `https://dg8dw0ohxnqbu.cloudfront.net/${img}`);
-
-		modal_img.modal('show');
-	});
 
 	$('#btn-upload-img').on('click', () => {
 		const file = $('#img').prop('files');
@@ -537,20 +729,113 @@ $(document).ready( () => {
 		}
 	});
 
-	$('#btn-view-img').on('click', function(){
+	//Ver una imagen previa
+	$('#table-refuels').on('click', '.btn-success', function(){
+		const ext = $(this).attr('img').split('.');
 		const img = $(this).attr('img');
 
-		//window.open('https://dg8dw0ohxnqbu.cloudfront.net/'+img);
+		if( ext[1]==='pdf' ){
+			window.open( `${apiObj.cdn}/${img}` );
+		}
+		else{
+			$('#modal-img img').prop('src', '');
+			
+			$('#modal-img img').prop('src', `${apiObj.cdn}/${img}`);
 
-		$('#modal-img img').prop('src', '');
+			modal_img.modal('show');
+		}
 		
-		$('#modal-img img').prop('src', `https://dg8dw0ohxnqbu.cloudfront.net/${img}`);
+	});
 
-		modal_img.modal('show');
+	$('#btn-view-img').on('click', function(){
+		const ext = $(this).attr('img').split('.');
+		const img = $(this).attr('img');
+
+		if( ext[1]==='pdf' ){
+			window.open( `${apiObj.cdn}/${img}` );
+		}
+		else{
+			$('#modal-img img').prop('src', '');
+			
+			$('#modal-img img').prop('src', `${apiObj.cdn}/${img}`);
+
+			modal_img.modal('show');
+		}
+	});
+
+	$('#img').on('change', function(){
+		const file = $('#img').prop('files');
+
+		$('#lb_img').html('Seleccione un archivo');
+
+		if( file.length>0 ){
+			$('#lb_img').html( file[0].name );
+		}
 	});
 //############################################################
 
-//MODAL DE TERJTAS
+//MODAL DE OFICINAS
+	$('#btn-location, #btn-location_cost').on('click', function(){
+		modal.modal('hide');
+
+		$('#location-search').val('');
+
+		const data = { search:$('#location-search').val() };
+
+		const u = objTOurl( data );
+
+		cards_locations.ajax.url(`${apiObj.host}/api/locations?${u}`).load();
+
+		$('#location_type').val( $(this).attr('id') );
+
+		modal_locations.modal('show');
+	});
+
+	$('#btn-search-location').on('click', () => {
+		const data = { search:$('#location-search').val() };
+
+		const u = objTOurl( data );
+
+		cards_locations.ajax.url(`${apiObj.host}/api/locations?${u}`).load();
+	});
+
+	$('#location-search').on('keypress', (e) => {
+		if( e.which===13 )
+			$('#btn-search-location').click();
+	});
+
+	$('#btn-location-close').on('click', () => {
+		modal.modal('show');
+
+		modal_locations.modal('hide');
+	});
+
+	$('#table-locations').on('click', '.btn', function(){
+		const idlocation = $(this).attr('idlocation');
+		const location = $(this).attr('location');
+		const type = $('#location_type').val();
+
+		const input = ( type==='btn-location' )?'location':'location_cost';
+
+		$(`#${ input }`).val( location );
+		$(`#${ input }`).attr('idlocation', idlocation );
+
+		modal_locations.modal('hide');
+		modal.modal('show');
+	});
+
+	$("#btn-erase-location").on('click', () => {
+		$('#location').val('');
+		$('#location').attr('idlocation', '');
+	});
+
+	$("#btn-erase-location_cost").on('click', () => {
+		$('#location_cost').val('');
+		$('#location_cost').attr('idlocation', '');
+	});
+//MODAL DE OFICINAS
+
+//MODAL DE TARJETAS
 //#####################################################################
 	//Mostrar modal para buscar tarjetas
 	$('#btn-card').on('click', () => {
@@ -638,6 +923,64 @@ $(document).ready( () => {
 	});
 //#####################################################################
 
+//MODAL DE STAFF
+//#####################################################################
+	//Mostrar modal para buscar
+	$('#btn-staff').on('click', () => {
+		modal.modal('hide');
+
+		const data = { name:$('#staff-search').val() };
+
+		const u = objTOurl( data );
+
+		staff_table.ajax.url(`${apiObj.host}/api/staff?${u}`).load();
+
+		modal_staff.modal('show');
+	});
+
+	//Seleccionar uno
+	$('#table-staff').on('click', '.btn', function(){
+		const idstaff = $(this).attr('idstaff')
+		const name = $(this).attr('name');
+
+		$('#staff').val( name );
+		$('#staff').attr('idstaff', idstaff);
+
+		modal_staff.modal('hide');
+		modal.modal('show');
+	});
+
+	//Cerar modal
+	$('#btn-staff-close').on('click', ()=>{
+		modal_staff.modal('hide');
+		modal.modal('show');
+	});
+
+	//Buscar con Enter
+	$('#staff-search').on('keypress', (e)=>{
+		if( e.which===13 )
+			$('#btn-search-staff').click();
+	});
+
+	//Buscar con click
+	$('#btn-search-staff').on('click', () => {
+		const data = { name:$('#staff-search').val() };
+
+		const u = objTOurl( data );
+
+		staff_table.ajax.url(`${apiObj.host}/api/staff?${u}`).load();
+	});
+
+	//Borrar datos de tarjeta
+	$('#btn-erase-staff').on('click', ()=>{
+		$('#staff').val('');
+		$('#staff').attr('idstaff', '');
+
+		/*$('#region').val('');
+		$('#subregion').val('');*/
+	});
+//#####################################################################
+
 //MODAL DE Vehiculos
 //#####################################################################
 	//Mostrar modal para ver vehiculo
@@ -707,8 +1050,8 @@ $(document).ready( () => {
 				$('#vehicle-version').val( vehicle.version );
 				$('#vehicle-chassis_number').val( vehicle.chassis_number );
 
-				//vehicle_table.ajax.url(`${ apiObj.host }/api/fm/vehiclehistory/${ economic_number }`).load();
-				vehicle_table.ajax.url(`${ apiObj.site }/ajax/response.php?e=${ economic_number }`).load();
+				vehicle_table.ajax.url(`${ apiObj.host }/api/fm/vehiclehistory/${ economic_number }`).load();
+				//vehicle_table.ajax.url(`${ apiObj.site }/ajax/response.php?e=${ economic_number }`).load();
 
 			}, errors => {
 				handleErrors( errors );
@@ -730,6 +1073,8 @@ $(document).ready( () => {
 
 		modal_vehicles.modal('hide');
 		modal.modal('show');
+
+		fillRefuelRegions();
 	});
 
 	//Seleccionar un vehiculo
@@ -739,13 +1084,16 @@ $(document).ready( () => {
 		const fm_planning = $(this).attr('fm_planning');
 		const fm_contract = $(this).attr('fm_contract');
 
-		const region = $(this).attr('region');
-		const subregion = $(this).attr('subregion');
-		const idregion = $(this).attr('idregion');
-		const idsubregion = $(this).attr('idsubregion');
+		const location_start = $(this).attr('location_start');
+		const idlocation_start = $(this).attr('idlocation_start');
+
+		const location_end = $(this).attr('location_end');
+		const idlocation_end = $(this).attr('idlocation_end');
 
 		const planning_type = $(this).attr('planning_type');
 		const idplanning_type = $(this).attr('idplanning_type');
+
+		const odometer = $(this).attr('odometer');
 
 		$('#vehicle').val( economic_number );
 		$('#vehicle').attr('idvehicle', idvehicle);
@@ -757,10 +1105,16 @@ $(document).ready( () => {
 		$('#fm_planning').val( fm_planning );
 		$('#fm_contract').val( fm_contract );
 
-		$('#region').val(region);
-		$('#region').attr('idregion', idregion);
-		$('#subregion').val(subregion);
-		$('#subregion').attr('idsubregion', idsubregion);
+		$('#location_start').val( location_start );
+		$('#location_start').attr('idlocation_start', idlocation_start);
+
+		$('#location_end').val( location_end );
+		$('#location_end').attr('idlocation_end', idlocation_end);
+
+		$('#odometer').val( odometer );
+
+		$('#region, #subregion').html('<option value=""></option>');
+		fillRefuelRegions();
 
 		modal_vehicles.modal('hide');
 		modal.modal('show');
@@ -784,6 +1138,9 @@ $(document).ready( () => {
 		$('#card').attr('economic_number', '');
 		$('#card').attr('idvehicle', '');
 
+		$('#staff').val('');
+		$('#staff').attr('idstaff', '');
+
 		$('#planning_type').attr('idplanning_type', '');
 
 		$('#hi_idrefuel').val('');
@@ -792,15 +1149,19 @@ $(document).ready( () => {
 		$('#vehicle').attr('idvehicle', '');
 		$('#vehicle').attr('economic_number', '');
 
-		$('#region').attr('idregion', '');
-		$('#subregion').attr('idsubregion', '');
-
+		$('#location').attr('idlocation', '');
+		$('#location_cost').attr('idlocation', '');
+		$('#location_start').attr('idlocation_start', '');
+		$('#location_end').attr('idlocation_end', '');
+	
 		$('#comments').val('');
 
 		$('#refuel_attached').addClass('d-none');
 		$('#btn-view-img').attr('img', '');
 
 		$('#btn-view-img').prop('disabled', false);
+
+		$('#lb_img').html('Seleccione un archivo');
 	}
 
 	const FMDate = ( data ) =>{
@@ -836,15 +1197,6 @@ $(document).ready( () => {
 		});
 	}
 
-	const fillSubRegionCost = ( idparent ) => {
-		$('#subregion_cost').html(`<option value=''></option>`);
-
-		subregions.forEach( (e, i, a) => {
-			if( idparent===e.idparent )
-				$('#subregion_cost').append(`<option value='${ e.idregion }'>${ e.name }</option>`);
-		});
-	}
-
 	const PerLiter = () => {
 		const amount = parseFloat( $('#amount').val() );
 		const liters = parseFloat( $('#liters').val() );
@@ -870,9 +1222,77 @@ $(document).ready( () => {
 		$('#planning_type').val( '' );
 		$('#planning_type').attr('idplanning_type', '');
 
-		$('#region').val('');
-		$('#region').attr('idregion', '');
-		$('#subregion').val('');
-		$('#subregion').attr('idsubregion', '');
+		$('#region_start').val('');
+		$('#region_start').attr('idregion_start', '');
+		$('#subregion_start').val('');
+		$('#subregion_start').attr('idsubregion_start', '');
+
+		$('#region_end').val('');
+		$('#region_end').attr('idregion_end', '');
+		$('#subregion_end').val('');
+		$('#subregion_end').attr('idsubregion_end', '');
+	}
+
+	const fillRefuelRegions = ( idregion, idsubregion ) => {
+		$('#region, #subregion').html('<option value=""></option>');
+
+		const region_start = $('#region_start').val();
+		const idregion_start = parseInt( $('#region_start').attr('idregion_start') );
+		const subregion_start = $('#subregion_start').val();
+		const idsubregion_start = parseInt( $('#subregion_start').attr('idsubregion_start') );
+
+		const region_end = $('#region_end').val();
+		const idregion_end = parseInt( $('#region_end').attr('idregion_end') );
+		const subregion_end = $('#subregion_end').val();
+		const idsubregion_end = parseInt( $('#subregion_end').attr('idsubregion_end') );
+
+		let region_start_is = false;
+		let region_end_is = false;
+		let subregion_start_is = false;
+		let subregion_end_is = false;
+
+		regions.forEach( (e, i, a) => {
+			$('#region').append(`<option ${ idregion===e.idregion?'selected':'' } value='${ e.idregion }'>${ e.name }</option`);
+
+			if( region_start!=='' ){
+				if( e.idregion===idregion_start )
+					region_start_is=true;
+
+				if( e.idregion===idregion_end )
+					region_end_is=true;
+			}
+			
+		});
+
+		if( !region_start_is && region_start!=='' )
+			$('#region').append(`<option ${ idregion===idregion_start?'selected':'' } value='${ idregion_start }'>${ region_start }</option>`);
+
+		if( !region_end_is && region_start!=='' )
+			$('#region').append(`<option ${ idregion===idregion_end?'selected':'' } value='${ idregion_end }'>${ region_end }</option>`);
+
+		if( idsubregion ){
+			const region_end = $('#region_end').val();
+			const idregion_end = parseInt( $('#region_end').attr('idregion_end') );
+			const subregion_end = $('#subregion_end').val();
+			const idsubregion_end = parseInt( $('#subregion_end').attr('idsubregion_end') );
+
+			subregions.forEach( (e, i, a) => {
+				if( idregion===e.idparent ){
+					$('#subregion').append(`<option ${ idsubregion===e.idregion ? 'selected' : '' } value='${ e.idregion }'>${ e.name }</option`);
+
+					if( e.idregion===idsubregion_start )
+						subregion_start_is=true;
+
+					if( e.idregion===idsubregion_end )
+						subregion_end_is=true;
+				}
+			});
+
+			if( !subregion_start_is && region_start!=='' )
+				$('#region').append(`<option ${ idsubregion===idsubregion_start ? 'selected' : '' } value='${ idsubregion_start }'>${ subregion_start }</option>`);
+
+			if( !subregion_end_is && region_start!=='' )
+				$('#region').append(`<option ${ idsubregion===idsubregion_end ? 'selected' : '' } value='${ idsubregion_end }'>${ subregion_end }</option>`);
+		}
 	}
 });

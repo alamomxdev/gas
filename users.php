@@ -103,18 +103,6 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col col-6">
-              <label class="form-label" for="password">Contraseña <span class="text-danger">*</span></label>
-              <input class="form-control form-control-sm" type="password" id="password">
-            </div>
-
-            <div class="col col-6">
-              <label class="form-label" for="password_confirm">Confirmacion <span class="text-danger">*</span></label>
-              <input class="form-control form-control-sm" type="password" id="password_confirm">
-            </div>
-          </div>
-
           <hr>
 
           <div class="row">
@@ -138,9 +126,18 @@
           <i class="fa-solid fa-xmark"></i>
           Cerrar
         </button>
+
+        <button class="btn btn-sm btn-secondary d-none" id='btn-reset-password'>
+            <i class="fa-solid fa-key"></i>
+
+            Restablecer
+        </button>
+
         <button class="btn btn-primary btn-sm" id="btn-save-supplier">
           <i class="fa-solid fa-floppy-disk"></i>
         </button>
+
+
       </div>
 
     </div>

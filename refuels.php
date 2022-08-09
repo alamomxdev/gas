@@ -7,11 +7,11 @@
     <div class="row g-3 align-items-center">
 
         <div class="col-auto">
-            <label for="input-search" class="col-form-label "># Carga</label>
+            <label for="input-search" class="col-form-label "># Folio/Ticket</label>
         </div>
 
         <div class="col-auto">
-            <input type="text" id="input-search" size="10" class="form-control form-control-sm text-uppercase" aria-describedby="">
+            <input type="text" id="input-search" size="5" class="form-control form-control-sm text-uppercase" aria-describedby="">
         </div>
 
         <div class="col-auto">
@@ -23,22 +23,30 @@
         </div>
 
         <div class="col-auto">
+            <select id="filter_location" class="form-select form-select-sm" style="min-width: 100px; max-width: 100px;"></select>
+        </div>
+
+        <div class="col-auto">
             <label for="filter-f1" class="col-form-label">F. Inicial</label>
         </div>
         <div class="col-auto">
-            <input type="date" id="filter-f1" class="form-control form-control-sm">
+            <input type="date" id="filter-f1" class="form-control form-control-sm" style="min-width: 100px; max-width: 100px;">
         </div>
 
         <div class="col-auto">
             <label for="filter-f2" class="col-form-label">F. Fin</label>
         </div>
         <div class="col-auto">
-            <input type="date" id="filter-f2" class="form-control form-control-sm" >
+            <input type="date" id="filter-f2" class="form-control form-control-sm" style="min-width: 100px; max-width: 100px;">
         </div>
 
         <div class="col-auto">
             <button class="btn btn-primary btn-sm" id="btn-search">
                 <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+
+            <button class="btn btn-success btn-sm" id="btn-excel">
+                <i class="fa-solid fa-file-excel"></i>
             </button>
 
             <button class="btn btn-success btn-sm" id="btn-add"> 
@@ -55,7 +63,7 @@
             <thead class="small">
                 <tr>
                     <th scope="col"># Tarjeta</th>
-                    <th scope="col"># Carga</th>
+                    <th scope="col"># Ticket</th>
                     <th scope="col">Proveedor</th>
                     <th scope="col">Tipo</th>
                     <th scope="col">Vehiculo</th>
@@ -124,7 +132,7 @@
                         </div>
 
                         <div class="col col-4">
-                            <label class="form-label" for="card1"># Carga <span class="small text-danger">*</span></label>
+                            <label class="form-label" for="card1"># Folio/Ticket <span class="small text-danger">*</span></label>
                             <input type="text" class="form-control form-control-sm text-uppercase" id="refuel">
                             <input type="hidden" id="hi_idrefuel">
                         </div>
@@ -137,7 +145,7 @@
                         </div>
 
                         <div class="col col-4">
-                            <label class="form-label" for="refuel_type">Propsito <span class="small text-danger">*</span></label>
+                            <label class="form-label" for="refuel_type">Sub categoria <span class="small text-danger">*</span></label>
                             <select class="form-select form-select-sm" id="refuel_subtype"></select>
                         </div>
 
@@ -158,28 +166,46 @@
                     <hr>
 
                     <div class="row">
-                        <div class="col col-3">
-                            <label class="form-label" for="region">Region de tarjeta</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase" id="region" disabled>
+                        <div class="col col-6">
+                            <label class="form-label" for="location">Oficina de carga <span class="small text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm text-uppercase" id="location" disabled>
+                                <button class="btn btn-sm btn-secondary" id="btn-location">
+                                    <i class="fa-solid fa-filter"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" id="btn-erase-location">
+                                    <i class="fa-solid fa-eraser"></i>
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="col col-3">
-                            <label class="form-label" for="subregion">Plaza de tarjeta</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase" id="subregion" disabled>
-                        </div>
-
-                        <div class="col col-3">
-                            <label class="form-label" for="region_cost">Region de <b>costo</b> <span class="small text-danger">*</span></label>
-                            <select class="form-select form-select-sm" id="region_cost"></select>
-                        </div>
-
-                        <div class="col col-3">
-                            <label class="form-label" for="subregion_cost">Plaza de <b>costo</b> <span class="small text-danger">*</span></label>
-                            <select class="form-select form-select-sm" id="subregion_cost"></select>
+                        <div class="col col-6">
+                            <label class="form-label" for="location_cost">Oficina de <b>costo</b> <span class="small text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm text-uppercase" id="location_cost" disabled>
+                                <button class="btn btn-sm btn-secondary" id="btn-location_cost">
+                                    <i class="fa-solid fa-filter"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" id="btn-erase-location_cost">
+                                    <i class="fa-solid fa-eraser"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <hr>
+
+                    <div class="row">
+                        <div class="col col-6">
+                            <label class="form-label" for="location_start">Oficina de salid</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="location_start" disabled>
+                        </div>
+
+                        <div class="col col-6">
+                            <label class="form-label" for="location_end">Oficina de retorno</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="location_end" disabled>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col col-3">
@@ -193,8 +219,13 @@
                         </div>
 
                         <div class="col col-3">
-                            <label class="form-label" for="planning_type">Tipo</label>
+                            <label class="form-label" for="planning_type">Tipo de planeacion</label>
                             <input type="text" class="form-control form-control-sm text-uppercase" id="planning_type" disabled>
+                        </div>
+
+                        <div class="col col-3">
+                            <label class="form-label" for="odometer">Kilometraje</label>
+                            <input type="number" class="form-control form-control-sm" id="odometer">
                         </div>
                     </div>
 
@@ -225,6 +256,26 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-3">
+                            <label class="form-label">Combustible <span class="small text-danger">*</span></label>
+                            <select class="form-select form-select-sm" id="fuel_type"></select>
+                        </div>
+
+                        <div class="col-5">
+                            <label class="form-label" for="card">Colaborador que cargo <span class="small text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm text-uppercase" id="staff" disabled>
+                                <button class="btn btn-sm btn-secondary" id="btn-staff">
+                                    <i class="fa-solid fa-filter"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" id="btn-erase-staff">
+                                    <i class="fa-solid fa-eraser"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <hr>
 
                     <div class="row">
@@ -241,8 +292,9 @@
                     <div class="row d-none" id="refuel_attached">
                         <div class="col col-12">
 
-                            <div class="input-group">
-                                <input type="file" class="form-control form-control-sm" id="img" accept="image/*">
+                            <div class="input-group d-flex justify-content-end">
+                                <label class="input-group-text border border-secondary" style="width: 90%;" for="img" id="lb_img">Seleccione un archivo</label>
+                                <input type="file" class="form-control form-control-sm d-none" id="img" accept="image/*,.pdf">
 
                                 <button class="btn btn-sm btn-primary" id="btn-upload-img">
                                     <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -334,7 +386,6 @@
 
 <!-- Modal Vehiculos -->
 <div class="modal" id="modal-vehicles">
-        
     <div class="modal-dialog modal-dialog-centered modal-xl">
         
         <div class="modal-content" style="max-height: 800px; min-height: 800px;">
@@ -417,10 +468,8 @@
                     <table class="table table-striped table-sm" id="table-vehicle">
                         <thead class="small">
                             <tr>
-                                <th scope="col">Vehiculo</th>
                                 <th scope="col">Planeacion</th>
                                 <th scope="col">Contrato</th>
-                                <th scope="col">Movimiento</th>
                                 <th scope="col">Tipo</th>
                                 <th scope="col">Salida</th>
                                 <th scope="col">Retorno</th>
@@ -428,7 +477,10 @@
                                 <th scope="col">Fin</th>
                                 <th scope="col">Inicio real</th>
                                 <th scope="col">Fin real</th>
-                                <th scope="col"> &nbsp; </th>
+                                <th scope="col"><i class="fa-solid fa-right-left"></i></th>
+                                <th scope="col">Pre</th>
+                                <th scope="col">Faltante</th>
+                                <th scope="col">&nbsp;</th>
                             </tr>
                         </thead>
 
@@ -449,13 +501,126 @@
         </div>
 
     </div>
-
 </div>
 <!-- Modal Vehiculos -->
 
+<!-- Modal para busqueda de tarjetas -->
+<div class="modal" id="modal-locations">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+
+        <input type="hidden" id="location_type">
+        
+        <div class="modal-content" style="max-height: 500px; min-height: 500px;">
+            <div class="modal-header">
+                <span class="fs-6">Busqueda de oficinas</span>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-auto">
+                        <label for="location-search">Oficina</label>
+                    </div>
+
+                    <div class="col-auto">
+                        <input type="text" class="form-control form-control-sm text-uppercase" id="location-search">
+                    </div>
+
+                    <div class="col-auto">
+                        <button class="btn btn-sm btn-primary" id="btn-search-location">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm" id="table-locations">
+                        <thead class="small">
+                            <tr>
+                                <th scope="col"> - </th>
+                                <th scope="col">Oficina</th>
+                                <th scope="col">Plaza</th>
+                                <th scope="col">Region</th>
+                                <th scope="col"> &nbsp; </th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="small"> </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" id="btn-location-close">
+                    <i class="fa-solid fa-xmark"></i>
+                    Cerrar
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Modal para busqueda de tarjetas -->
+
+<!-- Modal para busqueda de STAFF -->
+<div class="modal" id="modal-staff">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        
+        <input type="hidden" id="staff_member">
+
+        <div class="modal-content" style="max-height: 500px; min-height: 500px;">
+            <div class="modal-header">
+                <span class="fs-6">Busqueda de colaboradores</span>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-auto">
+                        <label for="staff-search">Nombre</label>
+                    </div>
+
+                    <div class="col-auto">
+                        <input type="text" class="form-control form-control-sm text-uppercase" id="staff-search">
+                    </div>
+
+                    <div class="col-auto">
+                        <button class="btn btn-sm btn-primary" id="btn-search-staff">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm" id="table-staff">
+                        <thead class="small">
+                            <tr>
+                                <th scope="col"> - </th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Puesto</th>
+                                <th scope="col"> &nbsp; </th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="small"> </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" id="btn-staff-close">
+                    <i class="fa-solid fa-xmark"></i>
+                    Cerrar
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Modal para busqueda de STAFF -->
+
 <!-- Modal img -->
 <div class="modal" id="modal-img">
-    
     <div class="modal-dialog modal-dialog-centered">
         
         <div class="modal-content">
@@ -469,6 +634,5 @@
         </div>
 
     </div>
-
 </div>
 <!-- Modal img -->

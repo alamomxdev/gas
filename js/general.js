@@ -3,11 +3,12 @@ const genObj = {};
 const apiObj = {
 	host : 'http://localhost:8080',
 	site : 'http://localhost/gas/',
+	cdn  : 'https://cdngc.tecnologiasalamo.com.mx'
 	/*host : 'https://gcdev.tecnologiasalamo.com.mx:8080',
 	site : 'https://tecnologiasalamo.com.mx/TEST_gascontrol/'*/
 }
 
-genObj.lenguage = {
+genObj.language = {
 		            "processing": "Procesando...",
 				    "lengthMenu": "Mostrar _MENU_ registros",
 				    "zeroRecords": "No se encontraron resultados",
@@ -100,16 +101,17 @@ const handleErrors = ( errors ) => {
 const dataTable = ( opt, ajax, columns ) => {
 	const table = $(`#${ opt.id }`).dataTable({
 		lengthMenu		: opt.lengths,
-		lenguage		: opt.lenguage,
+		language		: opt.language,
 		bFilter			: false,
 		buttons			: opt.buttons,
 		paging			: false,
 		ajax			: ajax,
+		bDestroy		: true,
 		columns			: columns,
 		iDisplayLength	: opt.limit ,//Paginación
 		scrollY			: opt.scrollY,
         scrollCollapse	: opt.scrollCollapse,
-		order: [[ 0, "asc" ]]
+        ordering		: false
 	}).DataTable();
 
 	return table;

@@ -135,7 +135,8 @@
     
     <header class="navbar navbar-dark sticky-top bg-secondary flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-5" href="#">
-        <span style="color:grey;">Gas</span> 
+        <img src="./assets/logo_alamo.png" class="mr-3" style="width:80px;">
+        <span style="color:black;">Gas</span> 
         <span style="color:skyblue;">Control</span>
       </a>
 
@@ -316,7 +317,6 @@
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js" integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 
