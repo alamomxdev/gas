@@ -195,6 +195,10 @@
               case 'refuels':
                 include('refuels.php');
               break;
+
+              case 'staff':
+                include('staff.php');
+              break;
               
               default:
                 // code...
@@ -359,6 +363,12 @@
       $md5 = md5_file('./js/refuels.js');
 
       echo '<script src="./js/refuels.js?'.$md5.'"></script>';
+    break;
+
+    case 'staff':
+      $md5 = md5_file('./js/staff.js');
+
+      echo '<script src="./js/staff.js?'.$md5.'"></script>';
     break;
     
     default:

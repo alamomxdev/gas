@@ -79,13 +79,15 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     
     <div class="modal-content">
+
       <div class="modal-header">
+
         <h5 class="modal-title"> Tarjeta #<span class="text-muted" id="sp-uid"></span> </h5>
       </div>
 
       <div class="modal-body">
         
-        <form id="form-card">
+        <form id="form-card" autocomplete="off">
           <div class="row">
             <div class="col-2">
               <label class="form-label" for="iduser">#</label>
@@ -134,7 +136,6 @@
           </div>
 
         </form>
-
       </div>
 
       <div class="modal-footer">

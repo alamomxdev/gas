@@ -176,7 +176,7 @@ $(document).ready( ()=>{
       $('#vehicle').attr( 'idvehicle', card.idvehicle );
       $('#vehicle').attr( 'economic_number', card.economic_number );
 
-      if( card.idsubregion ){
+      if( card.idsubregion || card.idregion ){
         $.each( subregions, (i, v) => {
           if( v.idparent===card.idregion )
             $('#subregion').append(`<option ${ ( v.idregion===card.idsubregion )?'selected':'' } value='${ v.idregion }'>${ v.name }</option>`);
