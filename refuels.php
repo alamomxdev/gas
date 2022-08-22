@@ -49,6 +49,11 @@
                 <i class="fa-solid fa-file-excel"></i>
             </button>
 
+            <button class="btn btn-success btn-sm" id="btn-layout-atica">
+                <i class="fa-solid fa-a"></i>
+                <i class="fa-solid fa-table"></i>
+            </button>
+
             <button class="btn btn-success btn-sm" id="btn-add"> 
                 <i class="fa-solid fa-plus"></i> 
             </button>

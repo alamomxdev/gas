@@ -504,6 +504,27 @@ $(document).ready( () => {
 		} )
 	});
 
+	$('#btn-layout-atica').on('click', () => {
+		const data = {
+			refuel_number 	: $('#input-search').val(),
+			idregion 		: ( $('#filter_region').val() )?parseInt( $('#filter_region').val() ):'',
+			idsubregion 	: ( $('#filter_subregion').val() )?parseInt( $('#filter_subregion').val() ):'',
+			f1 				: $('#filter-f1').val(),
+			f2 				: $('#filter-f2').val(),
+			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : ''
+		}
+
+		const u = objTOurl( data );
+
+		const request = ajaxRequest( ajaxSettingGen(`${url}/excelAtica?${ u }`, 'GET', headers_gen) );
+
+		request.then( res => {
+			toastr.success(`Layout para <b>Atica</b> enviado a su correo <i class="fa-solid fa-envelope-circle-check"></i>`);
+		}, errors => {
+			handleErrors(errors);
+		} )
+	});
+
 	//Calculo de litros
 	$('#amount, #liters').on('keyup', ()=>{
 		PerLiter();
