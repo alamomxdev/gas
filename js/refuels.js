@@ -215,8 +215,6 @@ $(document).ready( () => {
 			{ data: 'Type' },
 			{ data: 'PickUpLocation' },
 			{ data: 'DropOffLocation' },
-			{ data: 'StartTime', render:( data, type, row ) =>{ return FMDate( data ); } },
-			{ data: 'EndTime', render:( data, type, row ) =>{ return FMDate( data ); } },
 			{ data: 'ActualStartTime', render:( data, type, row ) =>{ return FMDate( data ); } },
 			{ data: 'ActualEndTime', render:( data, type, row ) =>{ return FMDate( data ); } },
 			{ data: 'VeicleChanged', render:( data, type, row ) =>{ return ( data )?'Si':'No' } },
@@ -228,9 +226,29 @@ $(document).ready( () => {
 			{ data: 'ActualEndTime', render:( data, type, row ) =>{ 
 				const { StartFuelLevel, EndFuelLevel, FuelCapacity } = row;
 
-				const liters =( StartFuelLevel > EndFuelLevel ) ? (((StartFuelLevel-EndFuelLevel)/100)*FuelCapacity)+' lts' : '';
+				const liters = ( StartFuelLevel > EndFuelLevel ) ? (((StartFuelLevel-EndFuelLevel)/100)*FuelCapacity)+' lts' : '';
 
 				return liters;
+			} },
+			{ data: 'HasERA', render:( data, type, row ) =>{ 
+				const ret = ( ( data )?'Si':'' )
+
+				return ret; 
+			} },
+			{ data: 'HasDrop', render:( data, type, row ) =>{ 
+				const ret = ( ( data )?'Si':'' )
+
+				return ret; 
+			} },
+			{ data: 'HasDelivery', render:( data, type, row ) =>{ 
+				const ret = ( ( data )?'Si':'' )
+
+				return ret; 
+			} },
+			{ data: 'HasRecolection', render:( data, type, row ) =>{ 
+				const ret = ( ( data )?'Si':'' )
+
+				return ret; 
 			} },
 			{ 
 				data: 'InvoicingStatus', 
@@ -252,76 +270,8 @@ $(document).ready( () => {
 
 						let button = 0;
 
-						$('#btn-select-vehicle').addClass('d-none');
-
-						if( idrefuel_type && idrefuel_subtype ){
-							const onid = [];
-							const onparent = [];
-
-							plannings.forEach( ( e, i, a ) => {
-								
-								if( e.idrefuel_type===idrefuel_subtype )
-									onid.push( e );
-
-								if( e.idrefuel_type===idrefuel_type )
-									onparent.push( e );
-							});
-
-							const fulltank = ( row.fullTankPrepayment==='true' )?true:false;
-				
-							if( onid.length > 0 ){
-								onid.forEach( ( element, index, array ) => {
-									if( element.idplanning_type === parseInt(row.PlanningType) ){
-										button = 1;
-
-										return;
-									}
-								});
-							}
-
-							if( onparent.length > 0 ){
-								onparent.forEach( ( element, index, array ) => {
-									if( element.idplanning_type === parseInt( row.PlanningType ) ){
-										button = 1;
-
-										return;
-									}
-
-									if( [ 26, 27 ].includes( element.idplanning_type ) && element.idplanning_type === parseInt( row.TypeId ) ){
-										button = 1;
-
-										return;
-									}
-								});
-							}
-
-							//Prvendida
-							if( idrefuel_subtype===11 && row.VehicleDriverHistoryNumber ) {
-								button = ( fulltank )
-													? 1 
-													: button ;
-							}
-																		
-
-							//Faltante
-							if( idrefuel_subtype===12 && row.VehicleDriverHistoryNumber ){
-								button = ( row.StartFuelLevel > row.EndFuelLevel && !fulltank  )
-																		? 1
-																		: button;
-							}
-
-							//Cuando es un cambio de unidad
-							if( idrefuel_subtype==18 && row.VeicleChanged )
-								button = 1;
-
-							/*console.log( idrefuel_subtype );
-							console.log( onid );
-							console.log( onparent );
-							console.log( row.PlanningType, row.TypeId )*/
-									
-						}
-
-						return ( button===1 ) ?`
+						button = row.Selectable;
+						return ( row.Selectable ) ?`
 								<button class='btn btn-primary btn-sm' 
 									location_start='${ location_start }'
 									idlocation_start='${ idlocation_start }'
@@ -400,7 +350,7 @@ $(document).ready( () => {
 		$.each( types, ( i, e ) => {
 			const { createdAt, updatedAt, ...data } = e;
 
-			$('#refuel_type').append(`<option value='${ e.idrefuel_type }'>${ e.name }</option>`);
+			$('#refuel_type').append(`<option value='${ e.idrefuel_type }'>${ e.name } </option>`);
 
 			refuel_types.push( data );
 		});
@@ -587,22 +537,29 @@ $(document).ready( () => {
 
 		let { pass, pass_data } = formInputsValidate(form);
 
-		console.log( form );
+		//Resfuel Sub Type
+		let rsp;
+		refuel_subtypes.forEach( ( row, i ) => {
+			if( form.idrefuel_subtype.value == row.idrefuel_type )
+				rsp = row;
+		});
+
+		//console.log( rsp );
 
 		//SI es auto nuevo no necesita planeacion
-		if( (form.idrefuel_subtype.value !== 15 && form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 21) && !form.fm_planning.value  ){
+		if( !form.fm_planning.value && rsp.hasPlanning  ){
 			pass = false;
 
 			toastr.warning('Es requerido una planeacion para seguir con la carga');
 		}
 
-		if( (form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 21) && !form.idvehicle.value ){
+		if(  !form.idvehicle.value && rsp.hasVehicle ){
 			pass = false;
 
 			toastr.warning('Es necesario seleccionar un vehiculo para la carga');
 		}
 
-		if( (form.idrefuel_subtype.value !== 19 && form.idrefuel_subtype.value !== 21) && !form.odometer.value ){
+		if( !form.odometer.value && rsp.hasVehicle ){
 			pass = false;
 
 			toastr.warning('Es necesario ingresar el kilometraje de la unidad');
@@ -1009,20 +966,27 @@ $(document).ready( () => {
 	//Mostrar modal para ver vehiculo
 	$('#btn-vehicle').on('click', () => {
 		const refuel_type = parseInt( $('#refuel_type').val() );
-		const refuel_subtype = $('#refuel_subtype').val();
+		const refuel_subtype = parseInt($('#refuel_subtype').val());
 
 		$('#btn-select-vehicle').addClass('d-none');
+
+		refuel_subtypes.forEach( ( v, i ) => {
+			if( refuel_subtype === v.idrefuel_type && !v.hasPlanning ){
+
+				$('#btn-select-vehicle').removeClass('d-none');
+
+				if( !v.hasVehicle )
+					$('#btn-select-vehicle').addClass('d-none');
+			}
+		});
+
+		
 
 		if(  refuel_type && refuel_subtype ){
 			modal_vehicles.modal('show');
 			modal.modal('hide');
 
 			const card_vehicle = $('#card').attr('economic_number');
-			
-			//Carga de auto nuevo
-			if( refuel_type===4 ){
-				$('#btn-select-vehicle').removeClass('d-none');
-			}
 
 			$('#modal-vehicles input').val('');
 			$('#vehicle-number').attr( 'idvehicle', '' );
@@ -1058,6 +1022,11 @@ $(document).ready( () => {
 		const economic_number = $('#vehicle-search').val();
 
 		if( economic_number ){
+			const idrefuel_type = $('#refuel_type').val();
+			const idrefuel_subtype = $('#refuel_subtype').val();
+
+			const data = { idrefuel_type, idrefuel_subtype };
+
 			const req_v = ajaxRequest( ajaxSettingGen(`${apiObj.host}/api/vehicles/search/${ economic_number }`, 'GET', headers_gen) );
 
 			req_v.then( response => {
@@ -1073,8 +1042,22 @@ $(document).ready( () => {
 				$('#vehicle-version').val( vehicle.version );
 				$('#vehicle-chassis_number').val( vehicle.chassis_number );
 
-				vehicle_table.ajax.url(`${ apiObj.host }/api/fm/vehiclehistory/${ economic_number }`).load();
-				//vehicle_table.ajax.url(`${ apiObj.site }/ajax/response.php?e=${ economic_number }`).load();
+				const ajax = {
+					url: `${ apiObj.host }/api/fm/vehiclehistory/${ economic_number }`,
+					type : "GET",
+					dataSrc: "result",
+					data,
+					beforeSend: ( req ) => {
+						req.setRequestHeader('x-token', localStorage.getItem('x-token') );				
+					},  
+					error: function( errors ){
+						handleErrors( errors );
+					}
+				}
+
+				dataTable( opts_v, ajax, columns_v );
+
+				//vehicle_table.ajax.url(`${ apiObj.host }/api/fm/vehiclehistory/${ economic_number }`).load();
 
 			}, errors => {
 				handleErrors( errors );
@@ -1088,7 +1071,7 @@ $(document).ready( () => {
 	//Seleccionar vehiculo sin planeacion
 	$('#btn-select-vehicle').on('click', () => {
 		const idvehicle = $('#vehicle-number').attr('idvehicle');
-		const economic_number = $(this).attr('economic_number');
+		const economic_number = $('#vehicle-number').val();
 
 		$('#vehicle').val( economic_number );
 		$('#vehicle').attr('idvehicle', idvehicle);
@@ -1216,7 +1199,7 @@ $(document).ready( () => {
 
 		refuel_subtypes.forEach( ( e, i, a ) => {
 			if( e.idparent===idparent )
-				$('#refuel_subtype').append(`<option value='${ e.idrefuel_type }'>${ e.name }</option>`);
+				$('#refuel_subtype').append(`<option value='${ e.idrefuel_type }'>${ e.name } ${ e.maxLiters ? `(Max ${e.maxLiters} lts.)`: '' }</option>`);
 		});
 	}
 

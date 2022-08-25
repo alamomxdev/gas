@@ -478,13 +478,15 @@
                                 <th scope="col">Tipo</th>
                                 <th scope="col">Salida</th>
                                 <th scope="col">Retorno</th>
-                                <th scope="col">Inicio</th>
-                                <th scope="col">Fin</th>
                                 <th scope="col">Inicio real</th>
                                 <th scope="col">Fin real</th>
-                                <th scope="col"><i class="fa-solid fa-right-left"></i></th>
-                                <th scope="col">Pre</th>
-                                <th scope="col">Faltante</th>
+                                <th scope="col"><i class="fa-solid fa-right-left"></i><i class="fa-solid fa-car-side"></i></th>
+                                <th scope="col"><i class="fa-solid fa-dollar-sign"></i><i class="fa-solid fa-gas-pump"></i></th>
+                                <th scope="col"><i class="fa-solid fa-battery-empty"></i><i class="fa-solid fa-gas-pump"></i></th>
+                                <th scope="col">ERA</th>
+                                <th scope="col">Drop</th>
+                                <th scope="col">Env</th>
+                                <th scope="col">Rec</th>
                                 <th scope="col">&nbsp;</th>
                             </tr>
                         </thead>
