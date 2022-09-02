@@ -334,7 +334,7 @@ $(document).ready( () => {
 		response.suppliers.forEach( (e, i, a) => {
 			suppliers.push( { idsupplier:e.idsupplier, name:e.name } );
 
-			$("#supplier").append(`<option value='${ e.idsupplier }'>${ e.name }</option>`);
+			$("#supplier, #filter_supplier").append(`<option value='${ e.idsupplier }'>${ e.name }</option>`);
 		});
 	}, errors => {
 		handleErrors( errors );
@@ -387,7 +387,7 @@ $(document).ready( () => {
 		});
 	}, errors => {
 		handleErrors( errors );
-	})
+	});
 //############################################################
 
 //Modal de Refuel
@@ -425,7 +425,8 @@ $(document).ready( () => {
 			idsubregion 	: ( $('#filter_subregion').val() )?parseInt( $('#filter_subregion').val() ):'',
 			f1 				: $('#filter-f1').val(),
 			f2 				: $('#filter-f2').val(),
-			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : ''
+			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : '',
+			idsupplier		: ( $('#filter_supplier').val() )?parseInt( $('#filter_supplier').val() ):''
 		}
 
 		const u = objTOurl( data );
@@ -440,7 +441,8 @@ $(document).ready( () => {
 			idsubregion 	: ( $('#filter_subregion').val() )?parseInt( $('#filter_subregion').val() ):'',
 			f1 				: $('#filter-f1').val(),
 			f2 				: $('#filter-f2').val(),
-			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : ''
+			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : '',
+			idsupplier		: ( $('#filter_supplier').val() )?parseInt( $('#filter_supplier').val() ):''
 		}
 
 		const u = objTOurl( data );
@@ -461,7 +463,8 @@ $(document).ready( () => {
 			idsubregion 	: ( $('#filter_subregion').val() )?parseInt( $('#filter_subregion').val() ):'',
 			f1 				: $('#filter-f1').val(),
 			f2 				: $('#filter-f2').val(),
-			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : ''
+			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : '',
+			idsupplier		: ( $('#filter_supplier').val() )?parseInt( $('#filter_supplier').val() ):''
 		}
 
 		const u = objTOurl( data );
@@ -975,8 +978,8 @@ $(document).ready( () => {
 
 				$('#btn-select-vehicle').removeClass('d-none');
 
-				if( !v.hasVehicle )
-					$('#btn-select-vehicle').addClass('d-none');
+				/*if( !v.hasVehicle )
+					$('#btn-select-vehicle').addClass('d-none');*/
 			}
 		});
 
