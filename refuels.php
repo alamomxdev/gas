@@ -15,6 +15,12 @@
         </div>
 
         <div class="col-auto">
+            <select id="filter_supplier" class="form-select form-select-sm" style="min-width: 100px; max-width: 100px;">
+                <option value=""></option>
+            </select>
+        </div>
+
+        <div class="col-auto">
             <select id="filter_region" class="form-select form-select-sm" style="min-width: 100px; max-width: 100px;"></select>
         </div>
 
@@ -40,27 +46,29 @@
             <input type="date" id="filter-f2" class="form-control form-control-sm" style="min-width: 100px; max-width: 100px;">
         </div>
 
+    </div>
+    <!-- Filtros -->
+
+    <div class="row justify-content-end">
         <div class="col-auto">
-            <button class="btn btn-primary btn-sm" id="btn-search">
+            <button class="btn btn-primary btn-sm m-1" id="btn-search">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
 
-            <button class="btn btn-success btn-sm" id="btn-excel">
+            <button class="btn btn-success btn-sm m-1" id="btn-excel">
                 <i class="fa-solid fa-file-excel"></i>
             </button>
 
-            <button class="btn btn-success btn-sm" id="btn-layout-atica">
+            <button class="btn btn-success btn-sm m-1" id="btn-layout-atica">
                 <i class="fa-solid fa-a"></i>
                 <i class="fa-solid fa-table"></i>
             </button>
 
-            <button class="btn btn-success btn-sm" id="btn-add"> 
+            <button class="btn btn-success btn-sm m-1" id="btn-add"> 
                 <i class="fa-solid fa-plus"></i> 
             </button>
         </div>
-
     </div>
-    <!-- Filtros -->
 
     <!-- Contenido -->
     <div class="table-responsive">
