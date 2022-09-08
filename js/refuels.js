@@ -761,7 +761,7 @@ $(document).ready( () => {
 	$('#btn-location, #btn-location_cost').on('click', function(){
 		modal.modal('hide');
 
-		const is_cost = ( $(this).attr('id')=='btn-location_cost' ) ? true : false;
+		const is_cost = ( $(this).attr('id')=='btn-location_cost' ) ? 1 : 0;
 
 		$('#location-search').val('');
 
@@ -777,7 +777,10 @@ $(document).ready( () => {
 	});
 
 	$('#btn-search-location').on('click', () => {
-		const data = { search:$('#location-search').val() };
+
+		const is_cost = ( $('#location_type').val()=='btn-location_cost' ) ? 1 : 0;
+
+		const data = { search:$('#location-search').val(), is_cost };
 
 		const u = objTOurl( data );
 
