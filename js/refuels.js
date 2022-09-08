@@ -761,7 +761,7 @@ $(document).ready( () => {
 	$('#btn-location, #btn-location_cost').on('click', function(){
 		modal.modal('hide');
 
-		const is_cost = ( $(this).attr('id')=='location_cost' ) ? true : false;
+		const is_cost = ( $(this).attr('id')=='btn-location_cost' ) ? true : false;
 
 		$('#location-search').val('');
 
