@@ -761,9 +761,11 @@ $(document).ready( () => {
 	$('#btn-location, #btn-location_cost').on('click', function(){
 		modal.modal('hide');
 
+		const is_cost = ( $(this).attr('id')=='location_cost' ) ? true : false;
+
 		$('#location-search').val('');
 
-		const data = { search:$('#location-search').val() };
+		const data = { search:$('#location-search').val(), is_cost };
 
 		const u = objTOurl( data );
 
