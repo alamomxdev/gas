@@ -21,18 +21,6 @@
         </div>
 
         <div class="col-auto">
-            <select id="filter_region" class="form-select form-select-sm" style="min-width: 100px; max-width: 100px;"></select>
-        </div>
-
-        <div class="col-auto">
-            <select id="filter_subregion" class="form-select form-select-sm" style="min-width: 100px; max-width: 100px;"></select>
-        </div>
-
-        <div class="col-auto">
-            <select id="filter_location" class="form-select form-select-sm" style="min-width: 100px; max-width: 100px;"></select>
-        </div>
-
-        <div class="col-auto">
             <label for="filter-f1" class="col-form-label">F. Inicial</label>
         </div>
         <div class="col-auto">
@@ -53,6 +41,11 @@
         <div class="col-auto">
             <button class="btn btn-primary btn-sm m-1" id="btn-search">
                 <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+
+            <button class="btn btn-info btn-sm m-1" id="btn-filters">
+                <i class="fa-solid fa-filter"></i>
+                <span class="badge text-bg-dark" id="badge-filters">0</span>
             </button>
 
             <button class="btn btn-success btn-sm m-1" id="btn-excel">
@@ -84,7 +77,7 @@
                     <th scope="col">Plaza</th>
                     <th scope="col">F. Carga</th>
                     <th scope="col">F. Registro</th>
-                    <th scope="col">Monto</th>
+                    <th scope="col">Total</th>
                     <th scope="col">Litros</th>
                     <th scope="col"> &nbsp; </th>
                 </tr>
@@ -103,7 +96,7 @@
                     <th scope="col">Plaza</th>
                     <th scope="col">F. Carga</th>
                     <th scope="col">F. Registro</th>
-                    <th scope="col">Monto</th>
+                    <th scope="col">Total</th>
                     <th scope="col">Litros</th>
                     <th scope="col"> &nbsp; </th>
                 </tr>
@@ -253,29 +246,12 @@
                             <input type="time" class="form-control form-control-sm text-uppercase" id="refuel_time">
                         </div>
 
-                        <div class="col col-2">
-                            <label class="form-label">Monto <span class="small text-danger">*</span></label>
-                            <input type="number" class="form-control form-control-sm text-uppercase" id="amount">
-                        </div>
-
-                        <div class="col col-2">
-                            <label class="form-label">Litros <span class="small text-danger">*</span></label>
-                            <input type="number" class="form-control form-control-s text-uppercase" id="liters">
-                        </div>
-
-                        <div class="col col-2">
-                            <label class="form-label">$/L</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase" id="amount_per_liter" disabled>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-3">
+                        <div class="col-2">
                             <label class="form-label">Combustible <span class="small text-danger">*</span></label>
                             <select class="form-select form-select-sm" id="fuel_type"></select>
                         </div>
 
-                        <div class="col-5">
+                        <div class="col-4">
                             <label class="form-label" for="card">Colaborador que cargo <span class="small text-danger">*</span></label>
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm text-uppercase" id="staff" disabled>
@@ -286,6 +262,34 @@
                                     <i class="fa-solid fa-eraser"></i>
                                 </button>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        
+                        <div class="col col-2">
+                            <label class="form-label">Monto <span class="small text-danger">*</span></label>
+                            <input type="number" class="form-control form-control-sm text-uppercase" id="amount">
+                        </div>
+
+                        <div class="col col-2">
+                            <label class="form-label">Impuestos <span class="small text-danger">*</span></label>
+                            <input type="number" class="form-control form-control-sm text-uppercase" id="taxes">
+                        </div>
+
+                        <div class="col col-2">
+                            <label class="form-label"><b>Total</b></label>
+                            <input type="number" class="form-control form-control-sm text-uppercase" id="total" disabled>
+                        </div>
+
+                        <div class="col col-2">
+                            <label class="form-label">Litros <span class="small text-danger">*</span></label>
+                            <input type="number" class="form-control form-control-s text-uppercase" id="liters">
+                        </div>
+
+                        <div class="col col-2">
+                            <label class="form-label">$/L</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="amount_per_liter" disabled>
                         </div>
                     </div>
 
@@ -651,3 +655,84 @@
     </div>
 </div>
 <!-- Modal img -->
+
+<!-- Modal Filtros -->
+<div class="modal" id="modal-filters">
+    
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <span class="fs-6">Filtros de busqueda</span>
+            </div>
+
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <label class="form-label">Region de carga</label>
+                        <select class="form-select form-select-sm" id="filter_region"></select>
+                    </div>
+
+                    <div class="col-4">
+                        <label class="form-label">Plaza de carga</label>
+                        <select class="form-select form-select-sm" id="filter_subregion"></select>
+                    </div>
+
+                    <div class="col-4">
+                        <label class="form-label">Oficina de carga</label>
+                        <select class="form-select form-select-sm" id="filter_location"></select>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-4">
+                        <label class="form-label">Region de costo</label>
+                        <select class="form-select form-select-sm" id="filter_region_cost"></select>
+                    </div>
+
+                    <div class="col-4">
+                        <label class="form-label">Plaza de costo</label>
+                        <select class="form-select form-select-sm" id="filter_subregion_cost"></select>
+                    </div>
+
+                    <div class="col-4">
+                        <label class="form-label">Oficina de costo</label>
+                        <select class="form-select form-select-sm" id="filter_location_cost"></select>
+                    </div>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="ch_cross_cost">
+                            <label class="form-check-label" for="ch_cross_cost">
+                                Costos cruzados
+                            </label>
+                        </div>
+                    
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary" id="btn-check-filters">
+                    <i class="fa-solid fa-check"></i>
+                </button>
+
+                <button class="btn btn-sm btn-info" id="btn-erase-filters">
+                    <i class="fa-solid fa-eraser"></i>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- Modal Filtros -->
