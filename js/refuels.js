@@ -22,13 +22,16 @@ $(document).ready( () => {
 	const modal_vehicles = $('#modal-vehicles');
 	const modal_img = $('#modal-img');
 	const modal_locations = $('#modal-locations');
-	const modal_staff = $('#modal-staff')
+	const modal_staff = $('#modal-staff');
+	const modal_filters = $('#modal-filters');
 
   	modal.modal({backdrop: 'static', keyboard: false, show:true });
   	modal_cards.modal({backdrop: 'static', keyboard: false, show:true });
   	modal_vehicles.modal({backdrop: 'static', keyboard: false, show:true });
   	modal_locations.modal({backdrop: 'static', keyboard: false, show:true });
   	modal_staff.modal({backdrop: 'static', keyboard: false, show:true });
+  	modal_filters.modal({backdrop: 'static', keyboard: false, show:true });
+
 
 //TABLAS
 //############################################################
@@ -56,7 +59,7 @@ $(document).ready( () => {
 			{ data: 'subregion' },
 			{ data: 'refuel_datetime' },
 			{ data: 'refuel_createdat' },
-			{ data: 'amount' },
+			{ data: 'total' },
 			{ data: 'liters' },
 			/*{ data: 'odometer' },*/
 			{ 
@@ -316,11 +319,11 @@ $(document).ready( () => {
   		locations = response.locations;
 
 
-  		$('#filter_region').append('<option value="">Region</option>');
+  		$('#filter_region, #filter_region_cost').append('<option value="">Region</option>');
   		$('#region_cost').append('<option value=""></option>');
 
   		regions.forEach( e => {
-  			$('#filter_region, #region_cost').append(`<option value='${ e.idregion }'>${ e.name }</option`);
+  			$('#filter_region, #region_cost, #filter_region_cost').append(`<option value='${ e.idregion }'>${ e.name }</option`);
   		});
   	}, errors => {
   		handleErrors( errors );
@@ -417,16 +420,45 @@ $(document).ready( () => {
 		});
 	});
 
+	//Cambio de region en filtro
+	$('#filter_region_cost').on('change', function(){
+		const region = parseInt($(this).val());
+		
+		$('#filter_subregion_cost').html('<option value="">Plaza</option>');
+		$('#filter_location_cost').html('<option value="">Oficina</option>');
+
+		$.each( subregions, ( i, e ) => {
+			if( e.idparent===region )
+				$('#filter_subregion_cost').append(`<option value='${ e.idregion }'>${ e.name }</option>`);
+		});
+	});
+
+	//Cambio de plaza
+	$('#filter_subregion_cost').on('change', function(){
+		const subregion = parseInt( $(this).val() );
+
+		$('#filter_location_cost').html('<option value="">Oficina</option>');
+
+		locations.forEach( ( location, index ) => {
+			if( subregion === location.idregion )
+				$('#filter_location_cost').append(`<option value='${ location.idlocation }'>${ location.name }</option>`);
+		});
+	});
+
 	//Buscar Refuel
 	$('#btn-search').on('click', () => { 
 		const data = {
 			refuel_number 	: $('#input-search').val(),
-			idregion 		: ( $('#filter_region').val() )?parseInt( $('#filter_region').val() ):'',
-			idsubregion 	: ( $('#filter_subregion').val() )?parseInt( $('#filter_subregion').val() ):'',
 			f1 				: $('#filter-f1').val(),
 			f2 				: $('#filter-f2').val(),
-			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : '',
-			idsupplier		: ( $('#filter_supplier').val() )?parseInt( $('#filter_supplier').val() ):''
+			idsupplier		: ( $('#filter_supplier').val() )?parseInt( $('#filter_supplier').val() ):'',
+			idregion 		: ( $('#filter_region').val() ) ? parseInt( $('#filter_region').val() ) : '',
+			idsubregion 	: ( $('#filter_subregion').val() ) ? parseInt( $('#filter_subregion').val() ) : '',
+			idlocation 	: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : '',
+			idregion_cost 		: ( $('#filter_region_cost').val() ) ? parseInt( $('#filter_region_cost').val() ) : '',
+			idsubregion_cost 	: ( $('#filter_subregion_cost').val() ) ? parseInt( $('#filter_subregion_cost').val() ) : '',
+			idlocation_cost 	: ( $('#filter_location_cost').val() ) ? parseInt( $('#filter_location_cost').val() ) : '',
+			cross_cost 			: ( $('#ch_cross_cost').is(':checked') ) ? 1 : 0
 		}
 
 		const u = objTOurl( data );
@@ -437,12 +469,16 @@ $(document).ready( () => {
 	$('#btn-excel').on('click', () => {
 		const data = {
 			refuel_number 	: $('#input-search').val(),
-			idregion 		: ( $('#filter_region').val() )?parseInt( $('#filter_region').val() ):'',
-			idsubregion 	: ( $('#filter_subregion').val() )?parseInt( $('#filter_subregion').val() ):'',
 			f1 				: $('#filter-f1').val(),
 			f2 				: $('#filter-f2').val(),
-			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : '',
-			idsupplier		: ( $('#filter_supplier').val() )?parseInt( $('#filter_supplier').val() ):''
+			idsupplier		: ( $('#filter_supplier').val() )?parseInt( $('#filter_supplier').val() ):'',
+			idregion 		: ( $('#filter_region').val() ) ? parseInt( $('#filter_region').val() ) : '',
+			idsubregion 	: ( $('#filter_subregion').val() ) ? parseInt( $('#filter_subregion').val() ) : '',
+			idlocation 	: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : '',
+			idregion_cost 		: ( $('#filter_region_cost').val() ) ? parseInt( $('#filter_region_cost').val() ) : '',
+			idsubregion_cost 	: ( $('#filter_subregion_cost').val() ) ? parseInt( $('#filter_subregion_cost').val() ) : '',
+			idlocation_cost 	: ( $('#filter_location_cost').val() ) ? parseInt( $('#filter_location_cost').val() ) : '',
+			cross_cost 			: ( $('#ch_cross_cost').is(':checked') ) ? 1 : 0
 		}
 
 		const u = objTOurl( data );
@@ -459,12 +495,16 @@ $(document).ready( () => {
 	$('#btn-layout-atica').on('click', () => {
 		const data = {
 			refuel_number 	: $('#input-search').val(),
-			idregion 		: ( $('#filter_region').val() )?parseInt( $('#filter_region').val() ):'',
-			idsubregion 	: ( $('#filter_subregion').val() )?parseInt( $('#filter_subregion').val() ):'',
 			f1 				: $('#filter-f1').val(),
 			f2 				: $('#filter-f2').val(),
-			idlocation 		: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : '',
-			idsupplier		: ( $('#filter_supplier').val() )?parseInt( $('#filter_supplier').val() ):''
+			idsupplier		: ( $('#filter_supplier').val() )?parseInt( $('#filter_supplier').val() ):'',
+			idregion 		: ( $('#filter_region').val() ) ? parseInt( $('#filter_region').val() ) : '',
+			idsubregion 	: ( $('#filter_subregion').val() ) ? parseInt( $('#filter_subregion').val() ) : '',
+			idlocation 	: ( $('#filter_location').val() ) ? parseInt( $('#filter_location').val() ) : '',
+			idregion_cost 		: ( $('#filter_region_cost').val() ) ? parseInt( $('#filter_region_cost').val() ) : '',
+			idsubregion_cost 	: ( $('#filter_subregion_cost').val() ) ? parseInt( $('#filter_subregion_cost').val() ) : '',
+			idlocation_cost 	: ( $('#filter_location_cost').val() ) ? parseInt( $('#filter_location_cost').val() ) : '',
+			cross_cost 			: ( $('#ch_cross_cost').is(':checked') ) ? 1 : 0
 		}
 
 		const u = objTOurl( data );
@@ -759,6 +799,47 @@ $(document).ready( () => {
 		if( file.length>0 ){
 			$('#lb_img').html( file[0].name );
 		}
+	});
+
+	//Filtos
+	$('#btn-filters').on('click', () => {
+		modal_filters.modal('show');
+	});
+
+	$('#btn-check-filters').on('click', () => {
+		var filters = 0;
+
+		if( $('#filter_region').val() ) 
+			filters++;
+
+		if( $('#filter_subregion').val() ) 
+			filters++;
+
+		if( $('#filter_location').val() ) 
+			filters++;
+
+		if( $('#filter_region_cost').val() ) 
+			filters++;
+
+		if( $('#filter_subregion_cost').val() ) 
+			filters++;
+
+		if( $('#filter_location_cost').val() ) 
+			filters++;
+
+		if( $('#ch_cross_cost').is(':checked') ) 
+			filters++;
+
+		$('#badge-filters').html( filters );
+
+		modal_filters.modal('hide');
+	});
+
+	$('#btn-erase-filters').on('click', () => {
+		$("#filter_region, #filter_region_cost").prop('selectedIndex', 0).change();
+		$('#ch_cross_cost').prop('checked', false);
+
+		$('#badge-filters').html( 0 );
 	});
 //############################################################
 
