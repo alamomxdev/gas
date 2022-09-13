@@ -479,7 +479,7 @@ $(document).ready( () => {
 	});
 
 	//Calculo de litros
-	$('#amount, #liters').on('keyup', ()=>{
+	$('#amount, #liters, #taxes').on('keyup', ()=>{
 		PerLiter();
 	});
 
@@ -531,6 +531,7 @@ $(document).ready( () => {
 			refuel_date 		: { value : $('#refuel_date').val(), required : true },
 			refuel_time 		: { value : $('#refuel_time').val(), required : true },
 			amount 				: { value : parseFloat( $('#amount').val() ), required : true },
+			taxes 				: { value : parseFloat( $('#taxes').val() ), required : true },
 			liters 				: { value : parseFloat( $('#liters').val() ), required : true },
 			comments 			: { value : $('#comments').val() },
 			odometer			: { value : parseInt( $('#odometer').val() ) },
@@ -638,6 +639,10 @@ $(document).ready( () => {
 			$('#refuel_date').val( refuel.refuel_date );
 			$('#refuel_time').val( refuel.refuel_time );
 			$('#amount').val( refuel.amount );
+			$('#taxes').val( refuel.taxes );
+
+			$('#total').val( refuel.total );
+
 			$('#liters').val( refuel.liters );
 
 			$('#fuel_type').val( refuel.idfuel_type );
@@ -1212,16 +1217,21 @@ $(document).ready( () => {
 	}
 
 	const PerLiter = () => {
-		const amount = parseFloat( $('#amount').val() );
-		const liters = parseFloat( $('#liters').val() );
+		const amount = parseFloat( ( $('#amount').val()==='' )?0:$('#amount').val() );
+		const liters = parseFloat( ( $('#liters').val()==='' )?0:$('#liters').val() );
+		const taxes = parseFloat( ( $('#taxes').val()==='' )?0:$('#taxes').val() );
+
+		const total = amount + taxes;
 
 		$('#amount_per_liter').val('');
 
-		if( amount>0 && liters>0 ){
-			const pl = new Intl.NumberFormat('en-IN').format( amount/liters );
+		if( total>0 && liters>0 ){
+			const pl = new Intl.NumberFormat('en-IN').format( total/liters );
 
 			$('#amount_per_liter').val( pl );
 		}
+
+		$('#total').val( total );
 	}
 
 	const emptyVehicle = () => {

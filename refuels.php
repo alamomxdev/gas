@@ -253,29 +253,12 @@
                             <input type="time" class="form-control form-control-sm text-uppercase" id="refuel_time">
                         </div>
 
-                        <div class="col col-2">
-                            <label class="form-label">Monto <span class="small text-danger">*</span></label>
-                            <input type="number" class="form-control form-control-sm text-uppercase" id="amount">
-                        </div>
-
-                        <div class="col col-2">
-                            <label class="form-label">Litros <span class="small text-danger">*</span></label>
-                            <input type="number" class="form-control form-control-s text-uppercase" id="liters">
-                        </div>
-
-                        <div class="col col-2">
-                            <label class="form-label">$/L</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase" id="amount_per_liter" disabled>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-3">
+                        <div class="col-2">
                             <label class="form-label">Combustible <span class="small text-danger">*</span></label>
                             <select class="form-select form-select-sm" id="fuel_type"></select>
                         </div>
 
-                        <div class="col-5">
+                        <div class="col-4">
                             <label class="form-label" for="card">Colaborador que cargo <span class="small text-danger">*</span></label>
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm text-uppercase" id="staff" disabled>
@@ -286,6 +269,34 @@
                                     <i class="fa-solid fa-eraser"></i>
                                 </button>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        
+                        <div class="col col-2">
+                            <label class="form-label">Monto <span class="small text-danger">*</span></label>
+                            <input type="number" class="form-control form-control-sm text-uppercase" id="amount">
+                        </div>
+
+                        <div class="col col-2">
+                            <label class="form-label">Impuestos <span class="small text-danger">*</span></label>
+                            <input type="number" class="form-control form-control-sm text-uppercase" id="taxes">
+                        </div>
+
+                        <div class="col col-2">
+                            <label class="form-label"><b>Total</b></label>
+                            <input type="number" class="form-control form-control-sm text-uppercase" id="total" disabled>
+                        </div>
+
+                        <div class="col col-2">
+                            <label class="form-label">Litros <span class="small text-danger">*</span></label>
+                            <input type="number" class="form-control form-control-s text-uppercase" id="liters">
+                        </div>
+
+                        <div class="col col-2">
+                            <label class="form-label">$/L</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="amount_per_liter" disabled>
                         </div>
                     </div>
 
