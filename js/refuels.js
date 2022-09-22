@@ -571,7 +571,7 @@ $(document).ready( () => {
 			refuel_date 		: { value : $('#refuel_date').val(), required : true },
 			refuel_time 		: { value : $('#refuel_time').val(), required : true },
 			amount 				: { value : parseFloat( $('#amount').val() ), required : true },
-			taxes 				: { value : parseFloat( $('#taxes').val() ), required : true },
+			taxes 				: { value : parseFloat( $('#taxes').val() ) },
 			liters 				: { value : parseFloat( $('#liters').val() ), required : true },
 			comments 			: { value : $('#comments').val() },
 			odometer			: { value : parseInt( $('#odometer').val() ) },
