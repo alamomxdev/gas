@@ -860,6 +860,8 @@ $(document).ready( () => {
 		$('#location_type').val( $(this).attr('id') );
 
 		modal_locations.modal('show');
+
+		$('#location-search').focus();
 	});
 
 	$('#btn-search-location').on('click', () => {
@@ -879,9 +881,10 @@ $(document).ready( () => {
 	});
 
 	$('#btn-location-close').on('click', () => {
+		modal_locations.modal('hide');
 		modal.modal('show');
 
-		modal_locations.modal('hide');
+		$('#btn-location').focus();
 	});
 
 	$('#table-locations').on('click', '.btn', function(){
@@ -896,6 +899,8 @@ $(document).ready( () => {
 
 		modal_locations.modal('hide');
 		modal.modal('show');
+
+		$('#odometer').focus();
 	});
 
 	$("#btn-erase-location").on('click', () => {
@@ -922,6 +927,8 @@ $(document).ready( () => {
 		cards_table.ajax.url(`${apiObj.host}/api/cards?${u}`).load();
 
 		modal_cards.modal('show');
+
+		$('#card-search').focus();
 	});
 
 	//Seleccionar una tarjeta
@@ -948,6 +955,8 @@ $(document).ready( () => {
 
 		modal_cards.modal('hide');
 		modal.modal('show');
+
+		$('#refuel').focus();
 	});
 
 	//Buscar con Enter
@@ -973,6 +982,8 @@ $(document).ready( () => {
 	$('#btn-card-close').on('click', ()=>{
 		modal_cards.modal('hide');
 		modal.modal('show');
+
+		$('#btn-card').focus();
 	});
 
 	//Borrar datos de tarjeta
@@ -1010,6 +1021,8 @@ $(document).ready( () => {
 		staff_table.ajax.url(`${apiObj.host}/api/staff?${u}`).load();
 
 		modal_staff.modal('show');
+
+		$('#staff-search').focus();
 	});
 
 	//Seleccionar uno
@@ -1022,12 +1035,16 @@ $(document).ready( () => {
 
 		modal_staff.modal('hide');
 		modal.modal('show');
+
+		$('#amount').focus();
 	});
 
 	//Cerar modal
 	$('#btn-staff-close').on('click', ()=>{
 		modal_staff.modal('hide');
 		modal.modal('show');
+
+		$('#btn-staff').focus();
 	});
 
 	//Buscar con Enter
@@ -1077,8 +1094,8 @@ $(document).ready( () => {
 		
 
 		if(  refuel_type && refuel_subtype ){
-			modal_vehicles.modal('show');
 			modal.modal('hide');
+			modal_vehicles.modal('show');
 
 			const card_vehicle = $('#card').attr('economic_number');
 
@@ -1088,6 +1105,8 @@ $(document).ready( () => {
 			if( card_vehicle ){
 				$('#vehicle-search').val( card_vehicle );
 			}
+
+			$('#vehicle-search').focus();
 
 			vehicle_table.ajax.url(`${ ajax_v.url }`).load();
 		}
@@ -1104,6 +1123,8 @@ $(document).ready( () => {
 	$('#btn-vehicle-close').on('click', () => {
 		modal_vehicles.modal('hide');
 		modal.modal('show');
+
+		$('#btn-vehicle').focus();
 	});
 
 	//Buscar en tabla
@@ -1175,6 +1196,8 @@ $(document).ready( () => {
 		modal.modal('show');
 
 		fillRefuelRegions();
+
+		$('#btn-location').focus();
 	});
 
 	//Seleccionar un vehiculo
@@ -1218,6 +1241,8 @@ $(document).ready( () => {
 
 		modal_vehicles.modal('hide');
 		modal.modal('show');
+
+		$('#btn-location').focus();
 	});
 
 	//Busqueda con ENTER
