@@ -208,7 +208,7 @@ $(document).ready( () => {
 			buttons 	: genObj.buttons,
 			limit 		: 10,
 			id    		: 'table-vehicle',
-			scrollY		: '38vh',
+			scrollY		: '30vh',
 	        scrollCollapse	: true
 		};
 
@@ -353,7 +353,7 @@ $(document).ready( () => {
 		$.each( types, ( i, e ) => {
 			const { createdAt, updatedAt, ...data } = e;
 
-			$('#refuel_type').append(`<option value='${ e.idrefuel_type }'>${ e.name } </option>`);
+			$('#refuel_type, #refuel_type_2').append(`<option value='${ e.idrefuel_type }'>${ e.name } </option>`);
 
 			refuel_types.push( data );
 		});
@@ -534,12 +534,36 @@ $(document).ready( () => {
 	$('#refuel_type').on('change', function(){
 		const idparent = parseInt($(this).val());
 
+		$('#refuel_type_2').val( idparent );
+
+		emptyVehicle();
+
+		fillSubtype( idparent );
+	});
+
+	$("#refuel_type_2").on('change', function(){
+		const idparent = parseInt($(this).val());
+
+		$('#refuel_type').val( idparent );
+
 		emptyVehicle();
 
 		fillSubtype( idparent );
 	});
 
 	$('#refuel_subtype').on('change', function(){
+		const subtype = parseInt( $(this).val() );
+
+		$('#refuel_subtype_2').val( subtype );
+
+		emptyVehicle();
+	});
+
+	$('#refuel_subtype_2').on('change', function(){
+		const subtype = parseInt( $(this).val() );
+
+		$('#refuel_subtype').val( subtype );
+
 		emptyVehicle();
 	});
 
@@ -1314,11 +1338,11 @@ $(document).ready( () => {
 	}
 
 	const fillSubtype = ( idparent ) => {
-		$('#refuel_subtype').html(`<option value=''></option>`);
+		$('#refuel_subtype, #refuel_subtype_2').html(`<option value=''></option>`);
 
 		refuel_subtypes.forEach( ( e, i, a ) => {
 			if( e.idparent===idparent )
-				$('#refuel_subtype').append(`<option value='${ e.idrefuel_type }'>${ e.name } ${ e.maxLiters ? `(Max ${e.maxLiters} lts.)`: '' }</option>`);
+				$('#refuel_subtype, #refuel_subtype_2').append(`<option value='${ e.idrefuel_type }'>${ e.name } ${ e.maxLiters ? `(Max ${e.maxLiters} lts.)`: '' }</option>`);
 		});
 	}
 
