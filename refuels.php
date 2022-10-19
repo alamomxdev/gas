@@ -413,6 +413,26 @@
 
             <div class="modal-body">
                 <div class="row">
+                    <div class="col-2">
+                        <label for="">Tipo de carga</label>
+                    </div>
+
+                    <div class="col-3">
+                        <select class="form-select form-select-sm" id="refuel_type_2"></select>
+                    </div>
+
+                    <div class="col-2">
+                        <label for="">Sub categoria</label>
+                    </div>
+
+                    <div class="col-3">
+                        <select class="form-select form-select-sm" id="refuel_subtype_2"></select>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
                     <div class="col-auto">
                         <label for="vehicle-search"># Vehiculo</label>
                     </div>
