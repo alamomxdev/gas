@@ -266,6 +266,21 @@
                     </div>
 
                     <div class="row">
+                        <div class="col col-4">
+                            <label class="form-label" for="card">Tipo de uso</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm text-uppercase" id="costs" disabled>
+                                <button class="btn btn-sm btn-secondary" id="btn-costs">
+                                    <i class="fa-solid fa-filter"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" id="btn-erase-costs">
+                                    <i class="fa-solid fa-eraser"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
                         
                         <div class="col col-2">
                             <label class="form-label">Monto <span class="small text-danger">*</span></label>
@@ -756,3 +771,67 @@
 
 </div>
 <!-- Modal Filtros -->
+
+<!-- Modal tipo de costo -->
+<div class="modal" id="modal-costs">
+    
+
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        
+        <div class="modal-content">
+            
+
+            <div class="modal-header">
+                <span class="fs-6">Uso de combustible</span>
+            </div>
+
+
+            <div class="modal-body">
+                
+                <div class="row">
+                    <div class="col-auto">
+                        <label for="costs-search">Buscar</label>
+                    </div>
+
+                    <div class="col-auto">
+                        <input type="text" class="form-control form-control-sm text-uppercase" id="costs-search">
+                    </div>
+
+                    <div class="col-auto">
+                        <button class="btn btn-sm btn-primary" id="btn-search-costs">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm" id="table-costs">
+                        <thead class="small">
+                            <tr>
+                                <th scope="col"> # </th>
+                                <th scope="col">Concepto</th>
+                                <th scope="col">Descripcion</th>
+                                <th scope="col"> &nbsp; </th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="small"> </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" id="btn-costs-close">
+                    <i class="fa-solid fa-xmark"></i>
+                    Cerrar
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- Modal tipo de costo -->

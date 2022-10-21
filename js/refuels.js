@@ -24,13 +24,17 @@ $(document).ready( () => {
 	const modal_locations = $('#modal-locations');
 	const modal_staff = $('#modal-staff');
 	const modal_filters = $('#modal-filters');
+	const modal_costs = $('#modal-costs');
 
-  	modal.modal({backdrop: 'static', keyboard: false, show:true });
-  	modal_cards.modal({backdrop: 'static', keyboard: false, show:true });
-  	modal_vehicles.modal({backdrop: 'static', keyboard: false, show:true });
-  	modal_locations.modal({backdrop: 'static', keyboard: false, show:true });
-  	modal_staff.modal({backdrop: 'static', keyboard: false, show:true });
-  	modal_filters.modal({backdrop: 'static', keyboard: false, show:true });
+	const modal_config = {backdrop: 'static', keyboard: false, show:true };
+
+  	modal.modal( modal_config );
+  	modal_cards.modal( modal_config );
+  	modal_vehicles.modal( modal_config );
+  	modal_locations.modal( modal_config );
+  	modal_staff.modal( modal_config );
+  	modal_filters.modal( modal_config );
+  	modal_costs.modal( modal_config );
 
 
 //TABLAS
@@ -162,6 +166,7 @@ $(document).ready( () => {
 			}
 		}
 		const staff_table = dataTable( opts_s, ajax_s, columns_s );
+	
 	//Tabla de Staff
 
 	//Tabla de Staff
@@ -307,6 +312,44 @@ $(document).ready( () => {
 
 		const vehicle_table = dataTable( opts_v, ajax_v, columns_v );
 	//Tabla de historico de auto
+
+
+	//Tabla de costos
+	const opts_costs = {
+			lengths 	: [ 10, 15 ],
+			language	: genObj.language,
+			buttons 	: genObj.buttons,
+			limit 		: 10,
+			id    		: 'table-costs',
+			scrollY		: '25vh',
+	        scrollCollapse	: true
+		};
+
+	const columns_costs = [
+			{ data: 'idcost_concept' },
+			{ data: 'concept' },
+			{ data: 'cost_name' },
+			{ data: 'status', render: ( data, type, row ) => { 
+				return `<button class='btn btn-primary btn-sm' idcost_concept='${ row.idcost_concept }' concept='${ row.concept }'> 
+								<i class="fa-solid fa-arrow-pointer"></i> 
+						</button>`; 
+			} }
+		];
+
+	const ajax_costs = {
+			url: `${apiObj.site}assets/costs.json`,
+			type : "GET",
+			dataSrc: "costs",
+			beforeSend: ( req ) => {
+				req.setRequestHeader('x-token', localStorage.getItem('x-token') );
+			},      
+			error: function( errors ){
+				handleErrors( errors );
+			}
+		}
+		
+	const costs_table = dataTable( opts_costs, ajax_costs, columns_costs );
+	//Tabla de costos
 //############################################################
 
 //Datos de BD
@@ -600,7 +643,8 @@ $(document).ready( () => {
 			comments 			: { value : $('#comments').val() },
 			odometer			: { value : parseInt( $('#odometer').val() ) },
 			idstaff				: { value : parseInt( $('#staff').attr('idstaff') ), required : true },
-			idfuel_type 		: { value : parseInt( $('#fuel_type').val() ), required : true }
+			idfuel_type 		: { value : parseInt( $('#fuel_type').val() ), required : true },
+			idcost_concept		: { value : parseInt( $('#costs').attr('idcost_concept') ) }
 		}
 
 		let { pass, pass_data } = formInputsValidate(form);
@@ -713,6 +757,9 @@ $(document).ready( () => {
 
 			$('#staff').val( refuel.staff );
 			$('#staff').attr('idstaff', refuel.idstaff);
+
+			$('#costs').val( refuel.cost_concept );
+			$('#costs').attr( 'idcost_concept', refuel.idcost_concept );
 
 			$('#comments').val( refuel.comments );
 
@@ -1060,7 +1107,7 @@ $(document).ready( () => {
 		modal_staff.modal('hide');
 		modal.modal('show');
 
-		$('#amount').focus();
+		$('#btn-costs').focus();
 	});
 
 	//Cerar modal
@@ -1275,6 +1322,70 @@ $(document).ready( () => {
 			$('#btn-search-vehicle').click();
 	});
 //#####################################################################
+
+
+//MODAL Costs
+//#####################################################################
+	//MOstrar modal
+	$('#btn-costs').on('click', () => {
+		modal.modal('hide');
+
+		const data = { search:$('#costs-search').val() };
+
+		const u = objTOurl( data );
+
+		costs_table.ajax.url(`${apiObj.host}/api/costconcept?${u}`).load();
+
+		modal_costs.modal('show');
+
+		$('#costs-search').focus();
+	});
+
+
+	//Limpair imput de costos
+	$('#btn-erase-costs').on('click', () => {
+		$('#costs').val('');
+		$('#costs').attr('idcost_concept', '');
+	});
+
+	//Cerrar modal
+	$('#btn-costs-close').on('click', ()=>{
+		modal_costs.modal('hide');
+		modal.modal('show');
+
+		$('#btn-costs').focus();
+	});
+
+	//Seleccionar uno
+	$('#table-costs').on('click', '.btn', function(){
+		const idcost_concept = $(this).attr('idcost_concept');
+		const concept = $(this).attr('concept');
+
+		$('#costs').val( concept );
+		$('#costs').attr('idcost_concept', idcost_concept);
+
+		modal_costs.modal('hide');
+		modal.modal('show');
+
+		$('#amount').focus();
+	});
+
+	//Buscar con Enter
+	$('#costs-search').on('keypress', (e)=>{
+		if( e.which===13 )
+			$('#btn-search-costs').click();
+	});
+
+	//Buscar con click
+	$('#btn-search-costs').on('click', () => {
+		const data = { search:$('#costs-search').val() };
+
+		const u = objTOurl( data );
+
+		costs_table.ajax.url(`${apiObj.host}/api/costconcept?${u}`).load();
+	});
+//#####################################################################
+
 
 	const deleteForm = () =>{
 		const form = document.forms['form-refuel'];
