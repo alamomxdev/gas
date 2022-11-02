@@ -723,8 +723,8 @@ $(document).ready( () => {
 			$('#card').val( refuel.card );
 			$('#card').attr( 'idcard', refuel.idcard );
 			$('#refuel').val( refuel.refuel_number );
-			$('#refuel_type').val( refuel.idrefuel_type );
-			$('#refuel_subtype').val( refuel.idrefuel_subtype );
+			$('#refuel_type, #refuel_type_2').val( refuel.idrefuel_type );
+			$('#refuel_subtype, #refuel_subtype_2').val( refuel.idrefuel_subtype );
 			$('#vehicle').val( refuel.economic_number );
 			$('#vehicle').attr( 'economic_number', refuel.economic_number );
 			$('#vehicle').attr( 'idvehicle', refuel.idvehicle );
