@@ -1589,8 +1589,8 @@ $(document).ready( () => {
 
 		req.then( response => {
 			const { min_date, min_time } = response;
-			const max_date = response.result.now.split(' ')[0];
-			const elapsed_time_limit = response.result.elapsed_time_limit;
+			const max_date = response.now.split(' ')[0];
+			const elapsed_time_limit = response.elapsed_time_limit;
 
 			$('#refuel_date').attr('min', (elapsed_time_limit == 0) ? '' : min_date);
 			$('#refuel_date').attr('max', max_date);
