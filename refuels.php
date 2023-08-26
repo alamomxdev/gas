@@ -24,14 +24,14 @@
             <label for="filter-f1" class="col-form-label">F. Inicial</label>
         </div>
         <div class="col-auto">
-            <input type="date" id="filter-f1" class="form-control form-control-sm" style="min-width: 100px; max-width: 100px;">
+            <input type="date" id="filter-f1" class="form-control form-control-sm" style="min-width: 100px; max-width: 110px; font-size: 13px;">
         </div>
 
         <div class="col-auto">
             <label for="filter-f2" class="col-form-label">F. Fin</label>
         </div>
         <div class="col-auto">
-            <input type="date" id="filter-f2" class="form-control form-control-sm" style="min-width: 100px; max-width: 100px;">
+            <input type="date" id="filter-f2" class="form-control form-control-sm" style="min-width: 100px; max-width: 110px; font-size: 13px;">
         </div>
 
     </div>
@@ -306,6 +306,11 @@
                             <label class="form-label">$/L</label>
                             <input type="text" class="form-control form-control-sm text-uppercase" id="amount_per_liter" disabled>
                         </div>
+
+                        <div class="col col-2">
+                            <label class="form-label"> <i class="fa-solid fa-gauge-high fa-lg"></i> </label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="fuel_level" style="width: 50px;" disabled>
+                        </div>
                     </div>
 
                     <hr>
@@ -530,6 +535,7 @@
                                 <th scope="col"><i class="fa-solid fa-right-left"></i><i class="fa-solid fa-car-side"></i></th>
                                 <th scope="col"><i class="fa-solid fa-dollar-sign"></i><i class="fa-solid fa-gas-pump"></i></th>
                                 <th scope="col"><i class="fa-solid fa-battery-empty"></i><i class="fa-solid fa-gas-pump"></i></th>
+                                <th scope="col"><i class="fa-solid fa-gauge-high"></i><i class="fa-solid fa-gas-pump"></i></th>
                                 <th scope="col">ERA</th>
                                 <th scope="col">Drop</th>
                                 <th scope="col">Env</th>

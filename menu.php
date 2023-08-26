@@ -199,6 +199,10 @@
               case 'staff':
                 include('staff.php');
               break;
+
+              case 'sysconfig':
+                include('sysconfig.php');
+              break;
               
               default:
                 // code...
@@ -313,6 +317,12 @@
       $md5 = md5_file('./js/staff.js');
 
       echo '<script src="./js/staff.js?'.$md5.'"></script>';
+    break;
+
+    case 'sysconfig':
+      $md5 = md5_file('./js/sysconfig.js');
+
+      echo '<script src="./js/sysconfig.js?'.$md5.'"></script>';
     break;
     
     default:

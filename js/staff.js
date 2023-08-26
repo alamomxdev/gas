@@ -136,7 +136,7 @@ $(document).ready( ()=>{
 			const request = ajaxRequest( settings );
 
 			request.then( response => {
-			const msg = ( uid )?'Actualizacion exitosa':'Alta en sistema existosa';
+				const msg = ( uid )?'Actualizacion exitosa':'Alta en sistema existosa';
 				toastr.success( msg );
 
 				modal.modal('hide');

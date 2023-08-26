@@ -232,12 +232,22 @@ $(document).ready( () => {
 				return prepay; 
 			} },
 			{ data: 'ActualEndTime', render:( data, type, row ) =>{ 
-				const { StartFuelLevel, EndFuelLevel, FuelCapacity } = row;
+					const { StartFuelLevel, EndFuelLevel, FuelCapacity } = row;
 
-				const liters = ( StartFuelLevel > EndFuelLevel ) ? (((StartFuelLevel-EndFuelLevel)/100)*FuelCapacity)+' lts' : '';
+					const liters = ( StartFuelLevel > EndFuelLevel ) ? (((StartFuelLevel-EndFuelLevel)/100)*FuelCapacity)+' lts' : '';
+			
+					return liters;
+				} 
+			},
+			{
+				data : 'EndFuelLevel', render : (data, type, row) => {
+					const { StartFuelLevel, EndFuelLevel, FuelCapacity } = row;
 
-				return liters;
-			} },
+					const liters_in = EndFuelLevel / 12.5;
+
+					return `${liters_in}/8`;
+				}
+			},
 			{ data: 'HasERA', render:( data, type, row ) =>{ 
 				const ret = ( ( data )?'Si':'' )
 
@@ -290,7 +300,8 @@ $(document).ready( () => {
 									fm_contract='${ fm_contract }'
 									idplanning_type='${ row.PlanningType }'
 									planning_type='${ row.Type }'
-									odometer='${ row.EndOdometer }'>
+									odometer='${ row.EndOdometer }'
+									fuel_level='${ row.EndFuelLevel }'>
 									<i class='fa-solid fa-arrow-pointer'></i> 
 								</button>`:''; 
 				}
@@ -613,6 +624,8 @@ $(document).ready( () => {
 	//Nuevo registro
 	$('#btn-add').on('click', ()=>{
 		deleteForm();
+
+		getMinDateTime();
 		
 		modal.modal('show');
 	});
@@ -620,6 +633,8 @@ $(document).ready( () => {
 	//Guardar o modificar registro
 	$('#btn-save-refuel').on('click', () => {
 		const uid = $('#hi_idrefuel').val();
+
+		const fuel_level = $('#fuel_level').val().split('/')
 
 		const form = {
 			idsupplier			: { value : parseInt( $('#supplier').val() ), required : true },
@@ -640,6 +655,7 @@ $(document).ready( () => {
 			amount 				: { value : parseFloat( $('#amount').val() ), required : true },
 			taxes 				: { value : parseFloat( $('#taxes').val() ) },
 			liters 				: { value : parseFloat( $('#liters').val() ), required : true },
+			fuel_level 			: { value : parseFloat( fuel_level[0] ) },
 			comments 			: { value : $('#comments').val() },
 			odometer			: { value : parseInt( $('#odometer').val() ) },
 			idstaff				: { value : parseInt( $('#staff').attr('idstaff') ), required : true },
@@ -706,6 +722,8 @@ $(document).ready( () => {
 
 	//Seleccionar una recarga
 	$('#table-refuels').on('click', '.btn-primary', function(){
+		getMinDateTime();
+
 		const idrefuel = parseInt( $(this).attr('idrefuel') );
 
 		const req = ajaxRequest( ajaxSettingGen(`${url}${idrefuel}`, 'GET', headers_gen) );
@@ -752,6 +770,7 @@ $(document).ready( () => {
 			$('#total').val( refuel.total );
 
 			$('#liters').val( refuel.liters );
+			$('#fuel_level').val( (!refuel.fuel_level) ? '' : `${refuel.fuel_level} / 8` );
 
 			$('#fuel_type').val( refuel.idfuel_type );
 
@@ -1289,6 +1308,8 @@ $(document).ready( () => {
 
 		const odometer = $(this).attr('odometer');
 
+		const fuel_level = $(this).attr('fuel_level');
+
 		$('#vehicle').val( economic_number );
 		$('#vehicle').attr('idvehicle', idvehicle);
 		$('#vehicle').attr('economic_number', economic_number);
@@ -1306,6 +1327,8 @@ $(document).ready( () => {
 		$('#location_end').attr('idlocation_end', idlocation_end);
 
 		$('#odometer').val( odometer );
+
+		$('#fuel_level').val( `${ fuel_level / 12.5 } / 8` );
 
 		$('#region, #subregion').html('<option value=""></option>');
 		fillRefuelRegions();
@@ -1555,5 +1578,24 @@ $(document).ready( () => {
 			if( !subregion_end_is && region_start!=='' )
 				$('#region').append(`<option ${ idsubregion===idsubregion_end ? 'selected' : '' } value='${ idsubregion_end }'>${ subregion_end }</option>`);
 		}
+	}
+
+	const getMinDateTime = () => {
+		const headers = {
+	    	'x-token' : localStorage.getItem('x-token')
+		}
+
+		const req = ajaxRequest( ajaxSettingGen(`${url}/refuelMinDate`, 'GET', headers) );
+
+		req.then( response => {
+			const { min_date, min_time } = response;
+			const max_date = response.result.now.split(' ')[0];
+			const elapsed_time_limit = response.result.elapsed_time_limit;
+
+			$('#refuel_date').attr('min', (elapsed_time_limit == 0) ? '' : min_date);
+			$('#refuel_date').attr('max', max_date);
+		}, error => {
+			handleErrors( error );
+		});
 	}
 });
