@@ -14,6 +14,12 @@ $(document).ready( () => {
 		$('#input-refuel-elapsed-time-limit').val(sysConfig.elapsed_time_limit);
 	});
 
+	$('#input-refuel-elapsed-time-limit, #input-fuel-amount-limit, #input-fuel-exceed-limit').on('keypress', function(e){
+		if( e.which==13 ){
+			$('#btn_guardar').click();
+		}
+	});
+
 	$('#btn_guardar').click(() => {
 		const form = {
 			fuel_limit_exceed_percentage : {value : $('#input-fuel-exceed-limit').val(), required : true},
