@@ -634,7 +634,7 @@ $(document).ready( () => {
 	$('#btn-save-refuel').on('click', () => {
 		const uid = $('#hi_idrefuel').val();
 
-		const fuel_level = $('#fuel_level').val().split('/')
+		const fuel_level = $('#fuel_level').val().split('/');
 
 		const form = {
 			idsupplier			: { value : parseInt( $('#supplier').val() ), required : true },
@@ -655,7 +655,7 @@ $(document).ready( () => {
 			amount 				: { value : parseFloat( $('#amount').val() ), required : true },
 			taxes 				: { value : parseFloat( $('#taxes').val() ) },
 			liters 				: { value : parseFloat( $('#liters').val() ), required : true },
-			fuel_level 			: { value : parseFloat( fuel_level[0] ) },
+			fuel_level 			: { value : parseFloat( fuel_level[0] ), passEmpety:true },
 			comments 			: { value : $('#comments').val() },
 			odometer			: { value : parseInt( $('#odometer').val() ) },
 			idstaff				: { value : parseInt( $('#staff').attr('idstaff') ), required : true },
@@ -663,6 +663,7 @@ $(document).ready( () => {
 			idcost_concept		: { value : parseInt( $('#costs').attr('idcost_concept') ) }
 		}
 
+		console.log(form);
 		let { pass, pass_data } = formInputsValidate(form);
 
 		//Resfuel Sub Type
