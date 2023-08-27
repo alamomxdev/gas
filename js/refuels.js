@@ -663,7 +663,6 @@ $(document).ready( () => {
 			idcost_concept		: { value : parseInt( $('#costs').attr('idcost_concept') ) }
 		}
 
-		console.log(form);
 		let { pass, pass_data } = formInputsValidate(form);
 
 		//Resfuel Sub Type
