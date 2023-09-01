@@ -5,7 +5,7 @@
 
 	<div class="row g-3 align-items-center">
 		<div class="col-auto">
-			<label class="col-form-label" for="input-fuel-exceed-limit" style="margin-left: 57px;">Procentaje de excedente de combustible</label>
+			<label class="col-form-label" for="input-fuel-exceed-limit" style="margin-left: 0px;">Procentaje excedente permitido de combustible (de acuerdo al tanque del vehiculo)</label>
 		</div>
 
 		<div class="col-auto">
@@ -20,7 +20,7 @@
 
 	<div class="row g-3 align-items-center">
 		<div class="col-auto">
-			<label class="col-form-label" for="input-fuel-amount-limit" style="margin-left: 138px;">Limite de monto de recarga</label>
+			<label class="col-form-label" for="input-fuel-amount-limit" style="margin-left: 253px;">Limite de monto por carga de combustible</label>
 		</div>
 
 		<div class="col-auto">
@@ -35,7 +35,7 @@
 
 	<div class="row g-3 align-items-center">
 		<div class="col-auto">
-			<label class="col-form-label" for="input-refuel-elapsed-time-limit" style="margin-left: 0px;">Limite de tiempo excedido para captura de cargas</label>
+			<label class="col-form-label" for="input-refuel-elapsed-time-limit" style="margin-left: 172px;">Horas de retraso permitidas pra el registro de una carga</label>
 		</div>
 
 		<div class="col-auto">
