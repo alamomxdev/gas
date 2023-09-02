@@ -35,7 +35,7 @@
 
 	<div class="row g-3 align-items-center">
 		<div class="col-auto">
-			<label class="col-form-label" for="input-refuel-elapsed-time-limit" style="margin-left: 172px;">Horas de retraso permitidas pra el registro de una carga</label>
+			<label class="col-form-label" for="input-refuel-elapsed-time-limit" style="margin-left: 164px;">Horas de retraso permitidas para el registro de una carga</label>
 		</div>
 
 		<div class="col-auto">
