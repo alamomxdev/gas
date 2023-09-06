@@ -12,6 +12,7 @@ $(document).ready( () => {
 		$('#input-fuel-exceed-limit').val(sysConfig.fuel_limit_exceed_percentage);
 		$('#input-fuel-amount-limit').val(sysConfig.refuel_amount_limit);
 		$('#input-refuel-elapsed-time-limit').val(sysConfig.elapsed_time_limit);
+		$('#input-amount-per-liter').val(sysConfig.amount_per_liter);
 	});
 
 	$('#input-refuel-elapsed-time-limit, #input-fuel-amount-limit, #input-fuel-exceed-limit').on('keypress', function(e){
@@ -24,7 +25,8 @@ $(document).ready( () => {
 		const form = {
 			fuel_limit_exceed_percentage : {value : $('#input-fuel-exceed-limit').val(), required : true},
 			refuel_amount_limit : {value : $('#input-fuel-amount-limit').val(), required : true},
-			elapsed_time_limit : {value : $('#input-refuel-elapsed-time-limit').val(), required : true}
+			elapsed_time_limit : {value : $('#input-refuel-elapsed-time-limit').val(), required : true},
+			amount_per_liter : {value : $('#input-amount-per-liter').val(), required : true}
 		}
 
 		const { pass, pass_data } = formInputsValidate(form);

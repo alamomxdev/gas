@@ -35,6 +35,21 @@
 
 	<div class="row g-3 align-items-center">
 		<div class="col-auto">
+			<label class="col-form-label" for="input-amount-per-liter" style="margin-left: 262px;">Limite de monto por litro de combustible</label>
+		</div>
+
+		<div class="col-auto">
+			<input type="number" id="input-amount-per-liter" class="form-control form-control-sm" style="width: 100px;" min="0" aria-describedby="">
+		</div>
+
+		<div class="col-auto">
+			<label class="col-form-label">$</label>
+			<span class="small text-danger">*</span>
+		</div>
+	</div>
+
+	<div class="row g-3 align-items-center">
+		<div class="col-auto">
 			<label class="col-form-label" for="input-refuel-elapsed-time-limit" style="margin-left: 164px;">Horas de retraso permitidas para el registro de una carga</label>
 		</div>
 
